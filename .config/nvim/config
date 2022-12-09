@@ -1,0 +1,137 @@
+" speedie's neovim configuration file
+
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.config/nvim/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+if empty(glob('~/.config/nvim/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.config/nvim/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+endif
+
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
+call plug#begin('~/.config/nvim/.vim/plugged')
+Plug 'dylanaraps/wal.vim'
+Plug 'lilydjwg/colorizer'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'ervandew/supertab'
+Plug 'mhinz/vim-startify'
+Plug 'preservim/nerdtree'
+Plug 'ryanoasis/vim-devicons'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'vim-airline/vim-airline'
+Plug 'vifm/vifm.vim'
+Plug 'derekwyatt/vim-fswitch'
+Plug 'pulkomandy/c.vim'
+Plug 'kg8m/vim-simple-align'
+Plug 'jreybert/vimagit'
+Plug 'mattn/emmet-vim'
+Plug 'airblade/vim-gitgutter'
+Plug 'ctrlpvim/ctrlp.vim'
+
+" NOTE: Neovim specific
+Plug 'williamboman/nvim-lsp-installer'
+Plug 'neovim/nvim-lspconfig'
+call plug#end()
+
+" Coc extensions
+let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-html', 'coc-html-css-support', 'coc-markdownlint', 'coc-sh']
+
+syntax on
+"set nu
+set rnu
+set autoindent
+set tabstop=4
+set smarttab
+set softtabstop=4
+set shiftwidth=4
+set expandtab
+set noswapfile
+set nocursorline
+set noshowmode
+set hidden
+set mouse=a
+set undolevels=1000
+set clipboard=unnamedplus
+set title
+set background=dark
+filetype plugin indent on
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+colorscheme wal
+map ZX :w<cr>
+map L 20l
+map H 20h
+map F :Vifm<cr>
+map ZF :!$BROWSER %<cr>
+map ZC :!/bin/sh -c %<cr>
+map T :%norm I<tab><cr>
+map W :!make<cr>
+
+vmap c :%norm $
+vmap C :%norm I
+
+nnoremap <C-f> :NERDTreeFind<cr>
+nnoremap <C-z> :NERDTreeToggle<cr>
+nnoremap <C-N> :bnext<cr>
+nnoremap <C-A> :badd New file<cr>
+nnoremap <C-X> :bdelete!<cr>
+nnoremap <C-s> :split<cr>
+nnoremap <C-q> :only<cr>
+nnoremap <C-F> :CtrlP<cr>
+
+let &t_Cs = "\e[4:3m"
+let &t_Ce = "\e[4:0m"
+
+" Airline
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='wal'
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.linenr = '␊'
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.whitespace = 'Ξ'
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = ''
+
+" NetRW
+let g:netrw_banner=0
+let g:netrw_liststyle=0
+let g:netrw_browse_split=4
+let g:netrw_altv=1
+let g:netrw_winsize=25
+let g:netrw_keepdir=0
+let g:netrw_localcopydircmd='cp -r'
+
+" misc
+let NERDTreeShowHidden=1
+let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+
+nnoremap d "_d
+xnoremap d "_d
+xnoremap p "_dP
+
+hi CocErrorHighlight gui=undercurl guisp=red
+hi SpellBad   guisp=red    gui=undercurl guifg=NONE guibg=NONE ctermfg=NONE ctermbg=NONE term=underline cterm=undercurl
+hi SpellCap   guisp=yellow    gui=undercurl guifg=NONE guibg=NONE ctermfg=NONE ctermbg=NONE term=underline cterm=undercurl
