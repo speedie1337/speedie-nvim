@@ -1,1 +1,1 @@
-source ~/.config/nvim/config
+source $HOME/.config/nvim/config

@@ -1,20 +1,20 @@
 " speedie's neovim configuration file
 
-let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.config/nvim/.vim'
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.config/nvim/vimdata'
 if empty(glob(data_dir . '/autoload/plug.vim'))
   silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-if empty(glob('~/.config/nvim/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.config/nvim/.vim/autoload/plug.vim --create-dirs
+if empty(glob('~/.config/nvim/vimdata/autoload/plug.vim'))
+  silent !curl -fLo ~/.config/nvim/vimdata/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 endif
 
 autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
   \| PlugInstall --sync | source $MYVIMRC
 \| endif
-call plug#begin('~/.config/nvim/.vim/plugged')
+call plug#begin('~/.config/nvim/vimdata/plugged')
 Plug 'dylanaraps/wal.vim'
 Plug 'lilydjwg/colorizer'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -32,14 +32,17 @@ Plug 'jreybert/vimagit'
 Plug 'mattn/emmet-vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'ctrlpvim/ctrlp.vim'
+Plug 'rainbowhxch/accelerated-jk.nvim'
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
 
-" NOTE: Neovim specific
-Plug 'williamboman/nvim-lsp-installer'
-Plug 'neovim/nvim-lspconfig'
+Plug 'junegunn/fzf'
 call plug#end()
 
 " Coc extensions
-let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-html', 'coc-html-css-support', 'coc-markdownlint', 'coc-sh']
+let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-html', 'coc-html-css-support', 'coc-markdownlint', 'coc-sh', 'coc-css']
 
 syntax on
 "set nu
@@ -71,10 +74,12 @@ map ZF :!$BROWSER %<cr>
 map ZC :!/bin/sh -c %<cr>
 map T :%norm I<tab><cr>
 map W :!make<cr>
+map Q :!gcc % -o %\.out<cr>
 
 vmap c :%norm $
 vmap C :%norm I
 
+nnoremap <C-t> :term<cr>
 nnoremap <C-f> :NERDTreeFind<cr>
 nnoremap <C-z> :NERDTreeToggle<cr>
 nnoremap <C-N> :bnext<cr>
@@ -84,8 +89,15 @@ nnoremap <C-s> :split<cr>
 nnoremap <C-q> :only<cr>
 nnoremap <C-F> :CtrlP<cr>
 
+nmap j <Plug>(accelerated_jk_gj)
+nmap k <Plug>(accelerated_jk_gk)
+
 let &t_Cs = "\e[4:3m"
 let &t_Ce = "\e[4:0m"
+
+let g:LanguageClient_serverCommands = {
+    \ 'sh': ['bash-language-server', 'start']
+    \ }
 
 " Airline
 if !exists('g:airline_symbols')
@@ -115,7 +127,6 @@ let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = ''
 
-" NetRW
 let g:netrw_banner=0
 let g:netrw_liststyle=0
 let g:netrw_browse_split=4
@@ -124,7 +135,6 @@ let g:netrw_winsize=25
 let g:netrw_keepdir=0
 let g:netrw_localcopydircmd='cp -r'
 
-" misc
 let NERDTreeShowHidden=1
 let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
 
@@ -135,3 +145,5 @@ xnoremap p "_dP
 hi CocErrorHighlight gui=undercurl guisp=red
 hi SpellBad   guisp=red    gui=undercurl guifg=NONE guibg=NONE ctermfg=NONE ctermbg=NONE term=underline cterm=undercurl
 hi SpellCap   guisp=yellow    gui=undercurl guifg=NONE guibg=NONE ctermfg=NONE ctermbg=NONE term=underline cterm=undercurl
+
+autocmd FileType scss setl iskeyword+=@-@
