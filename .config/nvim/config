@@ -1,4 +1,4 @@
-" speedie's neovim configuration file
+" speedie's neovim configura
 
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.config/nvim/vimdata'
 if empty(glob(data_dir . '/autoload/plug.vim'))
@@ -33,6 +33,7 @@ Plug 'mattn/emmet-vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'rainbowhxch/accelerated-jk.nvim'
+Plug 'jreybert/vimagit'
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
@@ -66,6 +67,8 @@ filetype plugin indent on
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 colorscheme wal
+
+" Mappings
 map ZX :w<cr>
 map L 20l
 map H 20h
@@ -76,6 +79,13 @@ map T :%norm I<tab><cr>
 map W :!make<cr>
 map Q :!gcc % -o %\.out<cr>
 
+nnoremap ciq ci"
+nnoremap diq di"
+nnoremap yiq yi"
+nnoremap cip ci)
+nnoremap dip di)
+nnoremap yip yi)
+
 vmap c :%norm $
 vmap C :%norm I
 
@@ -83,9 +93,11 @@ nnoremap <C-t> :term<cr>
 nnoremap <C-f> :NERDTreeFind<cr>
 nnoremap <C-z> :NERDTreeToggle<cr>
 nnoremap <C-N> :bnext<cr>
+nnoremap <C-P> :bprevious<cr>
 nnoremap <C-A> :badd New file<cr>
 nnoremap <C-X> :bdelete!<cr>
 nnoremap <C-s> :split<cr>
+nnoremap <C-w> :vsplit<cr>
 nnoremap <C-q> :only<cr>
 nnoremap <C-F> :CtrlP<cr>
 
@@ -141,9 +153,11 @@ let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclu
 nnoremap d "_d
 xnoremap d "_d
 xnoremap p "_dP
+nnoremap c "_c
 
 hi CocErrorHighlight gui=undercurl guisp=red
 hi SpellBad   guisp=red    gui=undercurl guifg=NONE guibg=NONE ctermfg=NONE ctermbg=NONE term=underline cterm=undercurl
 hi SpellCap   guisp=yellow    gui=undercurl guifg=NONE guibg=NONE ctermfg=NONE ctermbg=NONE term=underline cterm=undercurl
 
 autocmd FileType scss setl iskeyword+=@-@
+autocmd BufWritePre * %s/\s\+$//e
