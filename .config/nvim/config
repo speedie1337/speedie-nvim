@@ -116,16 +116,28 @@ vmap c :%norm $
 vmap C :%norm I
 
 nnoremap <C-t> :term<cr>
+
 nnoremap <C-f> :NERDTreeFind<cr>
 nnoremap <C-z> :NERDTreeToggle<cr>
+
 nnoremap <C-N> :bnext<cr>
 nnoremap <C-P> :bprevious<cr>
 nnoremap <C-A> :badd New file<cr>
 nnoremap <C-X> :bdelete!<cr>
+
 nnoremap <C-s> :split<cr>
 nnoremap <C-w> :vsplit<cr>
 nnoremap <C-q> :only<cr>
+
 nnoremap <C-F> :CtrlP<cr>
+
+nnoremap fl :SLoad<cr>
+nnoremap fs :SSave<cr>
+nnoremap fd :SDelete<cr>
+nnoremap fc :SClose<cr>
+
+nnoremap mci :!if [ -x "$(command -v doas)" ]; then; doas make clean install; else; sudo make clean install; fi<cr>
+nnoremap mci :!if [ -x "$(command -v doas)" ]; then; doas make clean install; else; sudo make clean install; fi<cr>
 
 nmap j <Plug>(accelerated_jk_gj)
 nmap k <Plug>(accelerated_jk_gk)
@@ -141,6 +153,8 @@ let g:LanguageClient_serverCommands = {
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
+
+let g:startify_custom_header = startify#pad(split(system('[ -e "$HOME/.config/nvim/start.sh" ] && $HOME/.config/nvim/start.sh'), '\n'))
 
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -184,5 +198,8 @@ hi CocErrorHighlight gui=undercurl guisp=red
 hi SpellBad   guisp=red    gui=undercurl guifg=NONE guibg=NONE ctermfg=NONE ctermbg=NONE term=underline cterm=undercurl
 hi SpellCap   guisp=yellow    gui=undercurl guifg=NONE guibg=NONE ctermfg=NONE ctermbg=NONE term=underline cterm=undercurl
 
+autocmd VimEnter :lcd %:p:h
 autocmd FileType scss setl iskeyword+=@-@
 autocmd BufWritePre * %s/\s\+$//e
+
+"autocmd BufWritePost options.h !command -v sudo > /dev/null && sudo make clean install || doas make clean install
