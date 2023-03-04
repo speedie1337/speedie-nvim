@@ -32,6 +32,7 @@ Plug 'jreybert/vimagit'
 Plug 'mattn/emmet-vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'ctrlpvim/ctrlp.vim'
+Plug 'tomasiser/vim-code-dark'
 Plug 'rainbowhxch/accelerated-jk.nvim'
 Plug 'jreybert/vimagit'
 Plug 'autozimu/LanguageClient-neovim', {
@@ -62,11 +63,21 @@ set mouse=a
 set undolevels=1000
 set clipboard=unnamedplus
 set title
-set background=dark
 filetype plugin indent on
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 colorscheme wal
+
+let g:airline_theme='wal'
+
+" true color
+set t_Co=256
+set t_ut=
+let g:airline_theme = 'codedark'
+colorscheme codedark
+set background=dark
+highlight Normal ctermfg=grey ctermbg=lightgray
+set termguicolors
 
 " Mappings
 map ZX :w<cr>
@@ -118,7 +129,6 @@ endif
 
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme='wal'
 let g:airline_left_sep = '»'
 let g:airline_left_sep = '▶'
 let g:airline_right_sep = '«'
