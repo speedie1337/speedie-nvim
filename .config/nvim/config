@@ -148,6 +148,11 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
+nnoremap H :vertical resize -10<cr>
+nnoremap J :resize -10<cr>
+nnoremap K :resize +10<cr>
+nnoremap L :vertical resize +10<cr>
+
 nnoremap mci :!if [ -x "$(command -v doas)" ]; then; doas make clean install; else; sudo make clean install; fi<cr>
 nnoremap mci :!if [ -x "$(command -v doas)" ]; then; doas make clean install; else; sudo make clean install; fi<cr>
 
