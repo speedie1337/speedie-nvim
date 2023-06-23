@@ -90,8 +90,6 @@ set termguicolors
 
 " Mappings
 map ZX :w<cr>
-map L 20l
-map H 20h
 map F :Vifm<cr>
 map ZF :!$BROWSER %<cr>
 map ZC :!/bin/sh -c %<cr>
@@ -119,6 +117,8 @@ nnoremap <C-e> :e ~/.config/nvim/config<cr>
 nnoremap ZA :Startify<cr>
 nnoremap <C-g> :AirlineToggle<cr>
 
+nnoremap <C-l> :call Markdownlenshorten()<cr>
+
 vmap c :%norm $
 vmap C :%norm I
 
@@ -143,6 +143,11 @@ nnoremap fs :SSave<cr>
 nnoremap fd :SDelete<cr>
 nnoremap fc :SClose<cr>
 
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
 nnoremap mci :!if [ -x "$(command -v doas)" ]; then; doas make clean install; else; sudo make clean install; fi<cr>
 nnoremap mci :!if [ -x "$(command -v doas)" ]; then; doas make clean install; else; sudo make clean install; fi<cr>
 
@@ -166,9 +171,9 @@ let g:startify_custom_footer = startify#pad(split(system('[ -e "$HOME/.config/nv
 
 let g:airline_powerline_fonts = 0
 let g:airline#extensions#tabline#enabled = 1
-"let g:airline_left_sep = ''
+let g:airline_left_sep = ''
 "let g:airline_left_sep = '▶'
-"let g:airline_right_sep = ''
+let g:airline_right_sep = ''
 "let g:airline_right_sep = '◀'
 let g:airline_symbols.linenr = ' ␊ '
 let g:airline_symbols.linenr = ' ␤ '
@@ -179,9 +184,9 @@ let g:airline_symbols.paste = ' Þ '
 let g:airline_symbols.paste = ' ∥ '
 let g:airline_symbols.whitespace = ' Ξ '
 "let g:airline_left_sep = ''
-"let g:airline_left_alt_sep = ''
+let g:airline_left_alt_sep = ''
 "let g:airline_right_sep = ''
-"let g:airline_right_alt_sep = ''
+let g:airline_right_alt_sep = ''
 let g:airline_symbols.branch = '  '
 let g:airline_symbols.readonly = '  '
 let g:airline_symbols.linenr = '  '
@@ -213,3 +218,19 @@ autocmd BufWritePre * %s/\s\+$//e
 autocmd User StartifyReady :AirlineToggle
 autocmd User StartifyBufferOpened :AirlineToggle
 "autocmd BufWritePost options.h !command -v sudo > /dev/null && sudo make clean install || doas make clean install
+
+function! Markdownlenshorten()
+   while (len(getline(".")) > 80)
+      normal! 0
+      " Find the first white-space character before the 81st character.
+      call search('\(\%81v.*\)\@<!\s\(.*\s.\{-}\%81v\)\@!', 'c', line('.'))
+      " Replace it with a new line.
+      exe "normal! r\<CR>"
+      " If the next line has words, join it to avoid weird raph breaks.
+      if (getline(line('.')+1) =~ '\w')
+         normal! J
+      endif
+   endwhile
+   " Trim any accidental trailing whitespace
+   :s/\s\+$//e
+endfunction
