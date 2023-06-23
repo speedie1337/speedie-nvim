@@ -37,8 +37,9 @@ Plug 'rainbowhxch/accelerated-jk.nvim'
 Plug 'jreybert/vimagit'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
-Plug 'preservim/tagbar'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'preservim/tagbar'
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
