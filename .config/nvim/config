@@ -37,6 +37,8 @@ Plug 'rainbowhxch/accelerated-jk.nvim'
 Plug 'jreybert/vimagit'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
+Plug 'preservim/tagbar'
+Plug 'tpope/vim-commentary'
 Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
@@ -107,9 +109,9 @@ nnoremap yip yi)
 " git integration
 nnoremap gP :![ -d ".git" ] && git push<cr>
 nnoremap gV :Magit<cr>
-nnoremap gb :Git blame<cr>
-nnoremap ga :Git add *<cr>
-nnoremap gc :Git commit -a<cr>
+nnoremap gB :Git blame<cr>
+nnoremap gA :Git add *<cr>
+nnoremap gC :Git commit -a<cr>
 nnoremap gn :GitGutterNextHunk<cr>
 nnoremap gp :GitGutterPrevHunk<cr>
 nnoremap <C-e> :e ~/.config/nvim/config<cr>
@@ -131,6 +133,8 @@ nnoremap <C-N> :bnext<cr>
 nnoremap <C-P> :bprevious<cr>
 nnoremap <C-A> :badd New file<cr>
 nnoremap <C-X> :bdelete!<cr>
+
+nnoremap f :TagbarToggle<cr>
 
 nnoremap <C-s> :split<cr>
 nnoremap <C-w> :vsplit<cr>
