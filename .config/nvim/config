@@ -1,246 +1,53 @@
-" speedie's neovim configuration
-
-let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.config/nvim/vimdata'
-if empty(glob(data_dir . '/autoload/plug.vim'))
-  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
-if empty(glob('~/.config/nvim/vimdata/autoload/plug.vim'))
-  silent !curl -fLo ~/.config/nvim/vimdata/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-endif
-
-autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-  \| PlugInstall --sync | source $MYVIMRC
-\| endif
-call plug#begin('~/.config/nvim/vimdata/plugged')
-Plug 'dylanaraps/wal.vim'
-Plug 'lilydjwg/colorizer'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'ervandew/supertab'
-Plug 'mhinz/vim-startify'
-Plug 'preservim/nerdtree'
-Plug 'ryanoasis/vim-devicons'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'vim-airline/vim-airline'
-Plug 'vifm/vifm.vim'
-Plug 'derekwyatt/vim-fswitch'
-Plug 'pulkomandy/c.vim'
-Plug 'kg8m/vim-simple-align'
-Plug 'jreybert/vimagit'
-Plug 'mattn/emmet-vim'
-Plug 'airblade/vim-gitgutter'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'tomasiser/vim-code-dark'
-Plug 'rainbowhxch/accelerated-jk.nvim'
-Plug 'jreybert/vimagit'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rhubarb'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-surround'
-Plug 'preservim/tagbar'
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
-
-Plug 'junegunn/fzf'
-call plug#end()
-
-" Coc extensions
-let g:coc_global_extensions = ['coc-json', 'coc-git', 'coc-html', 'coc-html-css-support', 'coc-markdownlint', 'coc-sh', 'coc-css']
-
 syntax on
-"set nu
+
 set rnu
-set autoindent
-set tabstop=4
+set mouse=a
+set clipboard=unnamedplus
+set title
+set hidden
 set smarttab
-set softtabstop=4
-set shiftwidth=4
+set autoindent
 set expandtab
 set noswapfile
 set nocursorline
-set noshowmode
-set hidden
-set mouse=a
-set undolevels=1000
-set clipboard=unnamedplus
-set title
-filetype plugin indent on
-let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-colorscheme wal
+set undolevels=10000
+set softtabstop=4
+set shiftwidth=4
+set tabstop=4
 
-let g:airline_theme='wal'
-
-" true color
+set termguicolors
 set t_Co=256
 set t_ut=
-let g:airline_theme = 'codedark'
-colorscheme codedark
 set background=dark
+
+autocmd BufReadPre *.md set spell
+autocmd BufWritePre * %s/\s\+$//e
+autocmd BufWritePre * %s/\t/    /e
+
 highlight Normal ctermfg=grey ctermbg=lightgray
-highlight StartifyBracket ctermfg=240
-highlight StartifyFooter  ctermfg=240
-highlight StartifyHeader  ctermfg=114
-highlight StartifyNumber  ctermfg=215
-highlight StartifyPath    ctermfg=245
-highlight StartifySlash   ctermfg=240
-highlight StartifySpecial ctermfg=240
-set termguicolors
+hi SpellBad guisp=red gui=undercurl guifg=NONE guibg=NONE ctermfg=NONE ctermbg=NONE term=underline cterm=undercurl
+hi SpellCap guisp=yellow gui=undercurl guifg=NONE guibg=NONE ctermfg=NONE ctermbg=NONE term=underline cterm=undercurl
 
-" Mappings
-map ZX :w<cr>
-map F :Vifm<cr>
-map ZF :!$BROWSER %<cr>
-map ZC :!/bin/sh -c %<cr>
-map T :%norm I<tab><cr>
-map W :!make<cr>
-map Q :!gcc % -o %\.out<cr>
-
-nnoremap ciq ci"
-nnoremap diq di"
-nnoremap yiq yi"
-nnoremap cip ci)
-nnoremap dip di)
-nnoremap yip yi)
-
-" git integration
-nnoremap gP :![ -d ".git" ] && git push<cr>
-nnoremap gV :Magit<cr>
-nnoremap gB :Git blame<cr>
-nnoremap gA :Git add *<cr>
-nnoremap gC :Git commit -a<cr>
-nnoremap gn :GitGutterNextHunk<cr>
-nnoremap gp :GitGutterPrevHunk<cr>
-nnoremap <C-e> :e ~/.config/nvim/config<cr>
-
-nnoremap ZA :Startify<cr>
-nnoremap <C-g> :AirlineToggle<cr>
-
-nnoremap <C-l> :call Markdownlenshorten()<cr>
-
-vmap c :%norm $
-vmap C :%norm I
-
-nnoremap <C-t> :term<cr>
-
-nnoremap <C-f> :NERDTreeFind<cr>
-nnoremap <C-z> :NERDTreeToggle<cr>
-
-nnoremap <C-N> :bnext<cr>
-nnoremap <C-P> :bprevious<cr>
-nnoremap <C-A> :badd New file<cr>
-nnoremap <C-X> :bdelete!<cr>
-
-nnoremap f :TagbarToggle<cr>
-
-nnoremap <C-s> :split<cr>
-nnoremap <C-w> :vsplit<cr>
-nnoremap <C-q> :only<cr>
-
-nnoremap <C-F> :CtrlP<cr>
-
-nnoremap fl :SLoad<cr>
-nnoremap fs :SSave<cr>
-nnoremap fd :SDelete<cr>
-nnoremap fc :SClose<cr>
+filetype plugin indent on
 
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
+nnoremap <C-s> :split<cr>
+nnoremap <C-w> :vsplit<cr>
+nnoremap <C-q> :only<cr>
+nnoremap <C-t> :term<cr>
 
 nnoremap H :vertical resize -10<cr>
 nnoremap J :resize -10<cr>
 nnoremap K :resize +10<cr>
 nnoremap L :vertical resize +10<cr>
 
-nnoremap mci :!if [ -x "$(command -v doas)" ]; then; doas make clean install; else; sudo make clean install; fi<cr>
-nnoremap mci :!if [ -x "$(command -v doas)" ]; then; doas make clean install; else; sudo make clean install; fi<cr>
-
-nmap j <Plug>(accelerated_jk_gj)
-nmap k <Plug>(accelerated_jk_gk)
-
-let &t_Cs = "\e[4:3m"
-let &t_Ce = "\e[4:0m"
-
-let g:LanguageClient_serverCommands = {
-    \ 'sh': ['bash-language-server', 'start']
-    \ }
-
-" Airline
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
-
-let g:startify_custom_header = startify#pad(split(system('[ -e "$HOME/.config/nvim/header.sh" ] && $HOME/.config/nvim/header.sh'), '\n'))
-let g:startify_custom_footer = startify#pad(split(system('[ -e "$HOME/.config/nvim/footer.sh" ] && $HOME/.config/nvim/footer.sh'), '\n'))
-
-let g:airline_powerline_fonts = 0
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_left_sep = ''
-"let g:airline_left_sep = '▶'
-let g:airline_right_sep = ''
-"let g:airline_right_sep = '◀'
-let g:airline_symbols.linenr = ' ␊ '
-let g:airline_symbols.linenr = ' ␤ '
-let g:airline_symbols.linenr = ' ¶ '
-let g:airline_symbols.branch = '⎇  '
-let g:airline_symbols.paste = 'ρ '
-let g:airline_symbols.paste = ' Þ '
-let g:airline_symbols.paste = ' ∥ '
-let g:airline_symbols.whitespace = ' Ξ '
-"let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-"let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
-let g:airline_symbols.branch = '  '
-let g:airline_symbols.readonly = '  '
-let g:airline_symbols.linenr = '  '
-
-let g:netrw_banner=0
-let g:netrw_liststyle=0
-let g:netrw_browse_split=4
-let g:netrw_altv=1
-let g:netrw_winsize=25
-let g:netrw_keepdir=0
-let g:netrw_localcopydircmd='cp -r'
-
-let NERDTreeShowHidden=1
-let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
-
 nnoremap d "_d
 xnoremap d "_d
 xnoremap p "_dP
 nnoremap c "_c
 
-hi CocErrorHighlight gui=undercurl guisp=red
-hi SpellBad   guisp=red    gui=undercurl guifg=NONE guibg=NONE ctermfg=NONE ctermbg=NONE term=underline cterm=undercurl
-hi SpellCap   guisp=yellow    gui=undercurl guifg=NONE guibg=NONE ctermfg=NONE ctermbg=NONE term=underline cterm=undercurl
-
-autocmd VimEnter :lcd %:p:h
-autocmd FileType scss setl iskeyword+=@-@
-autocmd BufWritePre * %s/\s\+$//e
-
-autocmd User StartifyReady :AirlineToggle
-autocmd User StartifyBufferOpened :AirlineToggle
-"autocmd BufWritePost options.h !command -v sudo > /dev/null && sudo make clean install || doas make clean install
-
-function! Markdownlenshorten()
-   while (len(getline(".")) > 80)
-      normal! 0
-      " Find the first white-space character before the 81st character.
-      call search('\(\%81v.*\)\@<!\s\(.*\s.\{-}\%81v\)\@!', 'c', line('.'))
-      " Replace it with a new line.
-      exe "normal! r\<CR>"
-      " If the next line has words, join it to avoid weird raph breaks.
-      if (getline(line('.')+1) =~ '\w')
-         normal! J
-      endif
-   endwhile
-   " Trim any accidental trailing whitespace
-   :s/\s\+$//e
-endfunction
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
