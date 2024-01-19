@@ -5,6 +5,7 @@ if [ -e "$HOME/.config/nvim" ]; then
     mkdir -p .config
     cp -r $HOME/.config/nvim .config/
     rm -rf .config/nvim/.session.nvim
+    rm -rf .config/nvim/lazy-lock.json
 
     git add .config/* commit.sh install.sh
     git commit -a -m "speedie-nvim | Add new config"

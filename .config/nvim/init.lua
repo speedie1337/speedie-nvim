@@ -5,7 +5,6 @@
     Dependencies:
 
       - Neovim 0.9 or later
-      -
 ]]--
 
 local cmd = vim.cmd -- Convenient alias
@@ -16,17 +15,23 @@ local autocmd = vim.api.nvim_create_autocmd -- Convenient alias
 local sessionFile = '~/.config/nvim/.session.nvim' -- File where the previous buffer is stored
 
 Theme = 'doom-one' -- Theme to use
-Languages = { -- Used to configure highlighting
-    'html',
-    'css',
-    'c',
-    'cpp', -- The best language
-    'php',
-    'lua',
-    'vim',
-    'vimdoc',
-    'markdown',
-} -- Languages to support
+Languages = { -- Languages to support - Used to configure highlighting
+    'html', -- For HTML
+    'css', -- For CSS
+    'c', -- For C
+    'cpp', -- For C++
+    'php', -- For PHP
+    'lua', -- For Lua
+    'markdown', -- For Markdown
+}
+LanguageServers = { -- Language servers to use for LSP, run LspInstall <lang> to see available servers
+    'html', -- For HTML
+    'cssls', -- For CSS
+    'clangd', -- For C and C++
+    'phpactor', -- For PHP
+    'lua_ls', -- For Lua
+    'marksman', -- For Markdown
+}
 Plugins = { -- Plugins to use
     { 'nvim-telescope/telescope.nvim',
         dependencies = {
