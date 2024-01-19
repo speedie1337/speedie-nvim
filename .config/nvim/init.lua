@@ -23,21 +23,17 @@ Languages = { -- Used to configure highlighting
     'markdown',
 } -- Languages to support
 Plugins = { -- Plugins to use
-    { 'nvim-telescope/telescope.nvim', dependencies = {
-        'nvim-lua/plenary.nvim',
-    } }, -- Fuzzy-finding
+    { 'nvim-telescope/telescope.nvim',
+        dependencies = {
+            'nvim-lua/plenary.nvim',
+        },
+    }, -- Fuzzy-finding
     { 'nvim-treesitter/nvim-treesitter' }, -- Better syntax highlighting
     { 'nvim-lualine/lualine.nvim' }, -- Status line
     { 'm4xshen/autoclose.nvim' }, -- Autoclose brackets
     { 'romgrk/doom-one.vim' }, -- Doom-One theme
     { 'stevearc/conform.nvim' }, -- Formatting
-    { 'NeogitOrg/neogit',
-        dependencies = {
-            'nvim-lua/plenary.nvim',
-            'sindrets/diffview.nvim',
-            'nvim-telescope/telescope.nvim',
-        },
-    }, -- Git integration
+    { 'tpope/vim-fugitive' }, -- Git integration
     { 'romgrk/barbar.nvim',
         dependencies = {
             'lewis6991/gitsigns.nvim',
@@ -50,14 +46,22 @@ Plugins = { -- Plugins to use
     { 'williamboman/mason.nvim',
         dependencies = {
             'williamboman/mason-lspconfig.nvim',
-        } }, -- Server auto-install
-    { 'VonHeikemen/lsp-zero.nvim', branch = 'v3.x', dependencies = {
-        'neovim/nvim-lspconfig',
-        'hrsh7th/cmp-nvim-lsp',
-        'hrsh7th/nvim-cmp',
-        'L3MON4D3/LuaSnip',
-    } }, -- LSP
+        },
+    }, -- Server auto-install
+    { 'VonHeikemen/lsp-zero.nvim', branch = 'v3.x',
+        dependencies = {
+            'neovim/nvim-lspconfig',
+            'hrsh7th/cmp-nvim-lsp',
+            'hrsh7th/nvim-cmp',
+            'L3MON4D3/LuaSnip',
+        },
+    }, -- LSP
     { 'nvim-tree/nvim-tree.lua' }, -- File manager
+    { 'lukas-reineke/indent-blankline.nvim',
+        dependencies = {
+            'nvim-treesitter/nvim-treesitter',
+        },
+    }, -- Indentation blankline
 }
 
 require('bootstrap') -- Set up Lazy and plugins.
@@ -189,8 +193,8 @@ autocmd('VimLeave', { -- Save session on exit
 require('conform_config')
 require('autoclose_config')
 require('lsp_config')
-require('neogit_config')
 require('lualine_config')
+require('ibl_config')
 require('tree_config')
 require('ts_config')
 require('theme_config')
