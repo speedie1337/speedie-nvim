@@ -1,6 +1,8 @@
--- Eviline config for lualine
--- Author: shadmansaleh
--- Credit: glepnir
+--[[
+            speedie's neovim configuration
+    -- https://git.speedie.site/speedie/speedie-nvim --
+]]--
+
 require('lualine').setup()
 
 local lualine = require('lualine')

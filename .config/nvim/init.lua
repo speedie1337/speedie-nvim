@@ -3,23 +3,41 @@
     -- https://git.speedie.site/speedie/speedie-nvim --
 ]]--
 
-require('bootstrap')
+local cmd = vim.cmd -- Convenient alias
+local opt = vim.opt -- Convenient alias
+local o = vim.o -- Convenient alias
+local keymap = vim.api.nvim_set_keymap -- Convenient alias
+local autocmd = vim.api.nvim_create_autocmd -- Convenient alias
+local sessionFile = '~/.config/nvim/.session.nvim' -- File where the previous buffer is stored
 
-local cmd = vim.cmd
-local opt = vim.opt
-local o = vim.o
-local keymap = vim.api.nvim_set_keymap
-local autocmd = vim.api.nvim_create_autocmd
-local sessionFile = vim.fn.expand('~/.config/nvim/.session.nvim')
-
-require("lazy").setup({
+Theme = 'doom-one' -- Theme to use
+Languages = { -- Used to configure highlighting
+    'html',
+    'css',
+    'c',
+    'cpp', -- The best language
+    'php',
+    'lua',
+    'vim',
+    'vimdoc',
+    'markdown',
+} -- Languages to support
+Plugins = { -- Plugins to use
     { 'nvim-telescope/telescope.nvim', dependencies = {
         'nvim-lua/plenary.nvim',
     } }, -- Fuzzy-finding
+    { 'nvim-treesitter/nvim-treesitter' }, -- Better syntax highlighting
     { 'nvim-lualine/lualine.nvim' }, -- Status line
     { 'm4xshen/autoclose.nvim' }, -- Autoclose brackets
     { 'romgrk/doom-one.vim' }, -- Doom-One theme
     { 'stevearc/conform.nvim' }, -- Formatting
+    { 'NeogitOrg/neogit',
+        dependencies = {
+            'nvim-lua/plenary.nvim',
+            'sindrets/diffview.nvim',
+            'nvim-telescope/telescope.nvim',
+        },
+    }, -- Git integration
     { 'romgrk/barbar.nvim',
         dependencies = {
             'lewis6991/gitsigns.nvim',
@@ -39,7 +57,10 @@ require("lazy").setup({
         'hrsh7th/nvim-cmp',
         'L3MON4D3/LuaSnip',
     } }, -- LSP
-})
+    { 'nvim-tree/nvim-tree.lua' }, -- File manager
+}
+
+require('bootstrap') -- Set up Lazy and plugins.
 
 opt.title = true -- Display title
 opt.spelllang = 'en_us' -- Use English (United States) as spellcheck language by default
@@ -71,13 +92,11 @@ o.t_8f = '\27[38;2;%lu;%lu;%lum' -- To be honest, I don't know what this does bu
 o.t_8b = '\27[48;2;%lu;%lu;%lum' -- To be honest, I don't know what this does but if I remember correctly it's something good.
 
 cmd([[
-    colorscheme doom-one
     highlight Normal ctermfg=grey ctermbg=lightgray guifg=#ffffff guibg=#222222
     highlight EndOfBuffer ctermfg=grey ctermbg=lightgray guifg=#ffffff guibg=#222222
     highlight Folded ctermfg=grey ctermbg=lightgray guifg=#afeeee guibg=#333333
     highlight SpellBad guisp=red gui=undercurl guifg=none guibg=none ctermfg=none ctermbg=none term=underline cterm=undercurl
     highlight SpellCap guisp=yellow gui=undercurl guifg=none guibg=none ctermfg=none ctermbg=none term=underline cterm=undercurl
-    filetype plugin indent on
 ]])
 
 keymap('n', '<C-h>', '<C-w>h', { noremap = true, silent = true })
@@ -94,7 +113,8 @@ keymap('n', '<F3>', ':set spelllang=en_us<cr>', { noremap = true, silent = true 
 keymap('n', '<F4>', ':set spelllang=sv_se<cr>', { noremap = true, silent = true })
 keymap('n', '<F7>', ':silent execute "!setxkbmap us"<cr>', { noremap = true, silent = true })
 keymap('n', '<F8>', ':silent execute "!setxkbmap se"<cr>', { noremap = true, silent = true })
-keymap('n', '<C-e>', 'z=', { noremap = true, silent = true })
+keymap('n', '<C-e>', ':NvimTreeToggle<cr>', { noremap = true, silent = true })
+keymap('n', 'ca', 'z=', { noremap = true, silent = true })
 keymap('n', '<C-b>', ':!ninja -C build<cr>', { noremap = true, silent = true })
 keymap('n', 'H', ':vertical resize -10<cr>', { noremap = true, silent = true })
 keymap('n', 'J', ':resize -10<cr>', { noremap = true, silent = true })
@@ -127,19 +147,6 @@ keymap('n', '<Space>bl', '<Cmd>BufferOrderByLanguage<cr>', { noremap = true, sil
 keymap('n', '<Space>bw', '<Cmd>BufferOrderByWindowNumber<cr>', { noremap = true, silent = true })
 
 
-local function saveSession() -- Save the current session
-    vim.cmd('mksession! ' .. sessionFile)
-end
-
-local function restoreSession() -- Restore the last session
-    if vim.fn.argc() == 0 then
-        if vim.fn.filereadable(sessionFile) == 1 then
-            vim.cmd('source ' .. sessionFile)
-            vim.cmd("filetype detect")
-        end
-    end
-end
-
 autocmd('BufWritePre', { -- Remove trailing spaces
     pattern = { '*' },
     callback = function()
@@ -161,17 +168,29 @@ autocmd('BufWritePre', { -- Replace four spaces with tabs in Makefiles
 autocmd('VimEnter', { -- Restore session on load
     pattern = { '*' },
     callback = function()
-        restoreSession()
+        local _sessionFile = vim.fn.expand(sessionFile)
+        if vim.fn.argc() == 0 then
+            if vim.fn.filereadable(_sessionFile) == 1 then
+                vim.cmd('source ' .. _sessionFile)
+                vim.cmd("filetype detect")
+            end
+        end
     end,
 })
 autocmd('VimLeave', { -- Save session on exit
     pattern = { '*' },
     callback = function()
-        saveSession()
+        local _sessionFile = vim.fn.expand(sessionFile)
+        vim.cmd('mksession! ' .. _sessionFile)
     end,
 })
 
+-- Set up various plugins
+require('conform_config')
+require('autoclose_config')
 require('lsp_config')
+require('neogit_config')
 require('lualine_config')
-require('conform').setup({})
-require('autoclose').setup({})
+require('tree_config')
+require('ts_config')
+require('theme_config')
