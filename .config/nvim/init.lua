@@ -3,13 +3,43 @@
     -- https://git.speedie.site/speedie/speedie-nvim --
 ]]--
 
+require('bootstrap')
+
 local cmd = vim.cmd
 local opt = vim.opt
 local o = vim.o
-local api = vim.api
 local keymap = vim.api.nvim_set_keymap
 local autocmd = vim.api.nvim_create_autocmd
 local sessionFile = vim.fn.expand('~/.config/nvim/.session.nvim')
+
+require("lazy").setup({
+    { 'nvim-telescope/telescope.nvim', dependencies = {
+        'nvim-lua/plenary.nvim',
+    } }, -- Fuzzy-finding
+    { 'nvim-lualine/lualine.nvim' }, -- Status line
+    { 'm4xshen/autoclose.nvim' }, -- Autoclose brackets
+    { 'romgrk/doom-one.vim' }, -- Doom-One theme
+    { 'stevearc/conform.nvim' }, -- Formatting
+    { 'romgrk/barbar.nvim',
+        dependencies = {
+            'lewis6991/gitsigns.nvim',
+            'nvim-tree/nvim-web-devicons',
+        }, opts = {
+            clickable = true,
+            animation = true,
+            focus_on_close = 'left',
+        } }, -- Tabs
+    { 'williamboman/mason.nvim',
+        dependencies = {
+            'williamboman/mason-lspconfig.nvim',
+        } }, -- Server auto-install
+    { 'VonHeikemen/lsp-zero.nvim', branch = 'v3.x', dependencies = {
+        'neovim/nvim-lspconfig',
+        'hrsh7th/cmp-nvim-lsp',
+        'hrsh7th/nvim-cmp',
+        'L3MON4D3/LuaSnip',
+    } }, -- LSP
+})
 
 opt.title = true -- Display title
 opt.spelllang = 'en_us' -- Use English (United States) as spellcheck language by default
@@ -25,7 +55,7 @@ opt.smartindent = true -- Automatically indent the next line
 opt.autoindent = true -- Pretty much same for this one
 opt.expandtab = true -- Replace tabs with spaces automatically
 opt.swapfile = false -- Don't use a swapfile
-opt.cursorline = false -- Don't show the cursor line
+opt.cursorline = true -- Show the cursor line
 opt.undolevels = 10000 -- Allow up to 10000 undos
 opt.tabstop = 4 -- Display a tab (\t) as 4 spaces
 opt.softtabstop = 4 -- Display a tab (\t) as 4 spaces
@@ -41,45 +71,67 @@ o.t_8f = '\27[38;2;%lu;%lu;%lum' -- To be honest, I don't know what this does bu
 o.t_8b = '\27[48;2;%lu;%lu;%lum' -- To be honest, I don't know what this does but if I remember correctly it's something good.
 
 cmd([[
-    colorscheme elflord
+    colorscheme doom-one
     highlight Normal ctermfg=grey ctermbg=lightgray guifg=#ffffff guibg=#222222
+    highlight EndOfBuffer ctermfg=grey ctermbg=lightgray guifg=#ffffff guibg=#222222
     highlight Folded ctermfg=grey ctermbg=lightgray guifg=#afeeee guibg=#333333
     highlight SpellBad guisp=red gui=undercurl guifg=none guibg=none ctermfg=none ctermbg=none term=underline cterm=undercurl
     highlight SpellCap guisp=yellow gui=undercurl guifg=none guibg=none ctermfg=none ctermbg=none term=underline cterm=undercurl
     filetype plugin indent on
 ]])
 
-keymap('n', '<C-h>', '<C-w>h', { noremap = true })
-keymap('n', '<C-j>', '<C-w>j', { noremap = true })
-keymap('n', '<C-k>', '<C-w>k', { noremap = true })
-keymap('n', '<C-l>', '<C-w>l', { noremap = true })
-keymap('n', '<C-s>', ':split<CR>', { noremap = true })
-keymap('n', '<C-w>', ':vsplit<CR>', { noremap = true })
-keymap('n', '<C-q>', ':only<CR>', { noremap = true })
-keymap('n', '<C-t>', ':term<CR>', { noremap = true })
-keymap('n', '<F2>', ':set spell!<CR>', { noremap = true })
-keymap('n', '<F3>', ':set spelllang=en_us<CR>', { noremap = true })
-keymap('n', '<F4>', ':set spelllang=sv_se<CR>', { noremap = true })
-keymap('n', '<F7>', ':silent execute "!setxkbmap us"<CR>', { noremap = true })
-keymap('n', '<F8>', ':silent execute "!setxkbmap se"<CR>', { noremap = true })
-keymap('n', '<C-R>', '[sz=', { noremap = true })
-keymap('n', '<C-e>', 'z=', { noremap = true })
-keymap('n', '<C-b>', ':!ninja -C build<CR>', { noremap = true })
-keymap('n', 'H', ':vertical resize -10<CR>', { noremap = true })
-keymap('n', 'J', ':resize -10<CR>', { noremap = true })
-keymap('n', 'K', ':resize +10<CR>', { noremap = true })
-keymap('n', 'L', ':vertical resize +10<CR>', { noremap = true })
-keymap('n', 'd', '"_d', { noremap = true })
-keymap('x', 'd', '"_d', { noremap = true })
-keymap('x', 'p', '"_dP', { noremap = true })
-keymap('n', 'c', '"_c', { noremap = true })
-keymap('n', '<C-A>', 'v/{<cr>%', { noremap = true })
+keymap('n', '<C-h>', '<C-w>h', { noremap = true, silent = true })
+keymap('n', '<C-j>', '<C-w>j', { noremap = true, silent = true })
+keymap('n', '<C-k>', '<C-w>k', { noremap = true, silent = true })
+keymap('n', '<C-l>', '<C-w>l', { noremap = true, silent = true })
+keymap('n', '<C-s>', ':split<cr>', { noremap = true, silent = true })
+keymap('n', '<C-w>', ':vsplit<cr>', { noremap = true, silent = true })
+keymap('n', '<C-q>', ':only<cr>', { noremap = true, silent = true })
+keymap('n', '<C-t>', ':term<cr>', { noremap = true, silent = true })
+keymap('n', '<C-f>', ':Telescope fd<cr>', { noremap = true, silent = true })
+keymap('n', '<F2>', ':set spell!<cr>', { noremap = true, silent = true })
+keymap('n', '<F3>', ':set spelllang=en_us<cr>', { noremap = true, silent = true })
+keymap('n', '<F4>', ':set spelllang=sv_se<cr>', { noremap = true, silent = true })
+keymap('n', '<F7>', ':silent execute "!setxkbmap us"<cr>', { noremap = true, silent = true })
+keymap('n', '<F8>', ':silent execute "!setxkbmap se"<cr>', { noremap = true, silent = true })
+keymap('n', '<C-e>', 'z=', { noremap = true, silent = true })
+keymap('n', '<C-b>', ':!ninja -C build<cr>', { noremap = true, silent = true })
+keymap('n', 'H', ':vertical resize -10<cr>', { noremap = true, silent = true })
+keymap('n', 'J', ':resize -10<cr>', { noremap = true, silent = true })
+keymap('n', 'K', ':resize +10<cr>', { noremap = true, silent = true })
+keymap('n', 'L', ':vertical resize +10<cr>', { noremap = true, silent = true })
+keymap('n', 'd', '"_d', { noremap = true, silent = true })
+keymap('x', 'd', '"_d', { noremap = true, silent = true })
+keymap('x', 'p', '"_dP', { noremap = true, silent = true })
+keymap('n', 'c', '"_c', { noremap = true, silent = true })
+keymap('n', '<C-A>', 'v/{<cr>%', { noremap = true, silent = true })
+keymap('n', '<A-,>', '<Cmd>BufferPrevious<cr>', { noremap = true, silent = true })
+keymap('n', '<A-.>', '<Cmd>BufferNext<cr>', { noremap = true, silent = true })
+keymap('n', '<A-<>', '<Cmd>BufferMovePrevious<cr>', { noremap = true, silent = true })
+keymap('n', '<A->>', '<Cmd>BufferMoveNext<cr>', { noremap = true, silent = true })
+keymap('n', '<A-1>', '<Cmd>BufferGoto 1<cr>', { noremap = true, silent = true })
+keymap('n', '<A-2>', '<Cmd>BufferGoto 2<cr>', { noremap = true, silent = true })
+keymap('n', '<A-3>', '<Cmd>BufferGoto 3<cr>', { noremap = true, silent = true })
+keymap('n', '<A-4>', '<Cmd>BufferGoto 4<cr>', { noremap = true, silent = true })
+keymap('n', '<A-5>', '<Cmd>BufferGoto 5<cr>', { noremap = true, silent = true })
+keymap('n', '<A-6>', '<Cmd>BufferGoto 6<cr>', { noremap = true, silent = true })
+keymap('n', '<A-7>', '<Cmd>BufferGoto 7<cr>', { noremap = true, silent = true })
+keymap('n', '<A-8>', '<Cmd>BufferGoto 8<cr>', { noremap = true, silent = true })
+keymap('n', '<A-9>', '<Cmd>BufferGoto 9<cr>', { noremap = true, silent = true })
+keymap('n', '<A-0>', '<Cmd>BufferLast<cr>', { noremap = true, silent = true })
+keymap('n', '<A-p>', '<Cmd>BufferPin<cr>', { noremap = true, silent = true })
+keymap('n', '<A-c>', '<Cmd>BufferClose<cr>', { noremap = true, silent = true })
+keymap('n', '<Space>bb', '<Cmd>BufferOrderByBufferNumber<cr>', { noremap = true, silent = true })
+keymap('n', '<Space>bd', '<Cmd>BufferOrderByDirectory<cr>', { noremap = true, silent = true })
+keymap('n', '<Space>bl', '<Cmd>BufferOrderByLanguage<cr>', { noremap = true, silent = true })
+keymap('n', '<Space>bw', '<Cmd>BufferOrderByWindowNumber<cr>', { noremap = true, silent = true })
 
-function saveSession() -- Save the current session
+
+local function saveSession() -- Save the current session
     vim.cmd('mksession! ' .. sessionFile)
 end
 
-function restoreSession() -- Restore the last session
+local function restoreSession() -- Restore the last session
     if vim.fn.argc() == 0 then
         if vim.fn.filereadable(sessionFile) == 1 then
             vim.cmd('source ' .. sessionFile)
@@ -118,3 +170,8 @@ autocmd('VimLeave', { -- Save session on exit
         saveSession()
     end,
 })
+
+require('lsp_config')
+require('lualine_config')
+require('conform').setup({})
+require('autoclose').setup({})
