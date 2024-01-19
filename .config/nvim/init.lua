@@ -1,6 +1,11 @@
 --[[
             speedie's neovim configuration
     -- https://git.speedie.site/speedie/speedie-nvim --
+
+    Dependencies:
+
+      - Neovim 0.9 or later
+      -
 ]]--
 
 local cmd = vim.cmd -- Convenient alias
@@ -62,6 +67,8 @@ Plugins = { -- Plugins to use
             'nvim-treesitter/nvim-treesitter',
         },
     }, -- Indentation blankline
+    { 'folke/trouble.nvim' }, -- Display warnings and errors neatly
+    { 'uga-rosa/translate.nvim' }, -- Built in translate
 }
 
 require('bootstrap') -- Set up Lazy and plugins.
@@ -114,8 +121,8 @@ keymap('n', '<F4>', ':set spelllang=sv_se<cr>', { noremap = true, silent = true 
 keymap('n', '<F7>', ':silent execute "!setxkbmap us"<cr>', { noremap = true, silent = true })
 keymap('n', '<F8>', ':silent execute "!setxkbmap se"<cr>', { noremap = true, silent = true })
 keymap('n', '<C-e>', ':NvimTreeToggle<cr>', { noremap = true, silent = true })
+keymap('n', '<C-b>', ':TroubleToggle<cr>', { noremap = true, silent = true })
 keymap('n', 'ca', 'z=', { noremap = true, silent = true })
-keymap('n', '<C-b>', ':!ninja -C build<cr>', { noremap = true, silent = true })
 keymap('n', 'H', ':vertical resize -10<cr>', { noremap = true, silent = true })
 keymap('n', 'J', ':resize -10<cr>', { noremap = true, silent = true })
 keymap('n', 'K', ':resize +10<cr>', { noremap = true, silent = true })
@@ -194,3 +201,5 @@ require('ibl_config')
 require('tree_config')
 require('ts_config')
 require('theme_config')
+require('trouble_config')
+require('translate_config')
