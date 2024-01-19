@@ -5,6 +5,7 @@
 
 local cmd = vim.cmd -- Convenient alias
 local opt = vim.opt -- Convenient alias
+local highlight = vim.api.nvim_set_hl -- Convenient alias
 local keymap = vim.api.nvim_set_keymap -- Convenient alias
 local autocmd = vim.api.nvim_create_autocmd -- Convenient alias
 local sessionFile = '~/.config/nvim/.session.nvim' -- File where the previous buffer is stored
@@ -91,13 +92,12 @@ opt.termguicolors = true -- Enable true color
 opt.autochdir = true -- Automatically change directory to the file we're editing
 opt.background = 'dark' -- Set background to dark
 
-cmd([[
-    highlight Normal ctermfg=grey ctermbg=lightgray guifg=#ffffff guibg=#222222
-    highlight EndOfBuffer ctermfg=grey ctermbg=lightgray guifg=#ffffff guibg=#222222
-    highlight Folded ctermfg=grey ctermbg=lightgray guifg=#afeeee guibg=#333333
-    highlight SpellBad guisp=red gui=undercurl guifg=none guibg=none ctermfg=none ctermbg=none term=underline cterm=undercurl
-    highlight SpellCap guisp=yellow gui=undercurl guifg=none guibg=none ctermfg=none ctermbg=none term=underline cterm=undercurl
-]])
+-- Fallback colors and undercurl, if supported
+highlight(0, 'Normal', { fg='#ffffff', bg='#222222' })
+highlight(0, 'EndOfBuffer', { fg='#ffffff', bg='#222222' })
+highlight(0, 'Folded', { fg='#afeeee', bg='#333333' })
+highlight(0, 'SpellBad', { undercurl=true, fg='#ff0000', bg=none, term=underline, cterm=undercurl })
+highlight(0, 'SpellCap', { undercurl=true, fg='#ffff00', bg=none, term=underline, cterm=undercurl })
 
 keymap('n', '<C-h>', '<C-w>h', { noremap = true, silent = true })
 keymap('n', '<C-j>', '<C-w>j', { noremap = true, silent = true })
