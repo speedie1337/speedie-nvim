@@ -103,8 +103,8 @@ opt.background = 'dark' -- Set background to dark
 highlight(0, 'Normal', { fg='#ffffff', bg='#222222' })
 highlight(0, 'EndOfBuffer', { fg='#ffffff', bg='#222222' })
 highlight(0, 'Folded', { fg='#afeeee', bg='#333333' })
-highlight(0, 'SpellBad', { undercurl=true, fg='#ff0000', bg=none, term=underline, cterm=undercurl })
-highlight(0, 'SpellCap', { undercurl=true, fg='#ffff00', bg=none, term=underline, cterm=undercurl })
+highlight(0, 'SpellBad', { undercurl=true, fg='#ff0000' })
+highlight(0, 'SpellCap', { undercurl=true, fg='#ffff00' })
 
 keymap('n', '<C-h>', '<C-w>h', { noremap = true, silent = true })
 keymap('n', '<C-j>', '<C-w>j', { noremap = true, silent = true })
