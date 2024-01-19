@@ -5,7 +5,6 @@
 
 local cmd = vim.cmd -- Convenient alias
 local opt = vim.opt -- Convenient alias
-local o = vim.o -- Convenient alias
 local keymap = vim.api.nvim_set_keymap -- Convenient alias
 local autocmd = vim.api.nvim_create_autocmd -- Convenient alias
 local sessionFile = '~/.config/nvim/.session.nvim' -- File where the previous buffer is stored
@@ -91,9 +90,6 @@ opt.laststatus = 0 -- Don't display file information
 opt.termguicolors = true -- Enable true color
 opt.autochdir = true -- Automatically change directory to the file we're editing
 opt.background = 'dark' -- Set background to dark
-
-o.t_8f = '\27[38;2;%lu;%lu;%lum' -- To be honest, I don't know what this does but if I remember correctly it's something good.
-o.t_8b = '\27[48;2;%lu;%lu;%lum' -- To be honest, I don't know what this does but if I remember correctly it's something good.
 
 cmd([[
     highlight Normal ctermfg=grey ctermbg=lightgray guifg=#ffffff guibg=#222222
