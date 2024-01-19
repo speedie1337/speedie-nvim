@@ -1,19 +1,17 @@
 --[[
             speedie's neovim configuration
     -- https://git.speedie.site/speedie/speedie-nvim --
-
-    Dependencies:
-
-      - Neovim 0.9 or later
 ]]--
 
-local cmd = vim.cmd -- Convenient alias
 local opt = vim.opt -- Convenient alias
 local highlight = vim.api.nvim_set_hl -- Convenient alias
 local keymap = vim.api.nvim_set_keymap -- Convenient alias
 local autocmd = vim.api.nvim_create_autocmd -- Convenient alias
-local sessionFile = '~/.config/nvim/.session.nvim' -- File where the previous buffer is stored
+local defaultKeybindOptions = { noremap = true, silent = true } -- Default keybind options
 
+LoadPreviousSessionOnLoad = false -- Load previous session or not
+SessionFile = '~/.config/nvim/.session.nvim' -- File where the previous buffer is stored
+LeaderKey = ' ' -- The leader key to use. Default is the space key.
 Theme = 'doom-one' -- Theme to use
 Languages = { -- Languages to support - Used to configure highlighting
     'html', -- For HTML
@@ -111,53 +109,60 @@ highlight(0, 'Folded', { fg='#afeeee', bg='#333333' })
 highlight(0, 'SpellBad', { undercurl=true, fg='#ff0000' })
 highlight(0, 'SpellCap', { undercurl=true, fg='#ffff00' })
 
-keymap('n', '<C-h>', '<C-w>h', { noremap = true, silent = true })
-keymap('n', '<C-j>', '<C-w>j', { noremap = true, silent = true })
-keymap('n', '<C-k>', '<C-w>k', { noremap = true, silent = true })
-keymap('n', '<C-l>', '<C-w>l', { noremap = true, silent = true })
-keymap('n', '<C-s>', ':split<cr>', { noremap = true, silent = true })
-keymap('n', '<C-w>', ':vsplit<cr>', { noremap = true, silent = true })
-keymap('n', '<C-q>', ':only<cr>', { noremap = true, silent = true })
-keymap('n', '<C-t>', ':term<cr>', { noremap = true, silent = true })
-keymap('n', '<C-f>', ':Telescope fd<cr>', { noremap = true, silent = true })
-keymap('n', '<F2>', ':set spell!<cr>', { noremap = true, silent = true })
-keymap('n', '<F3>', ':set spelllang=en_us<cr>', { noremap = true, silent = true })
-keymap('n', '<F4>', ':set spelllang=sv_se<cr>', { noremap = true, silent = true })
-keymap('n', '<F7>', ':silent execute "!setxkbmap us"<cr>', { noremap = true, silent = true })
-keymap('n', '<F8>', ':silent execute "!setxkbmap se"<cr>', { noremap = true, silent = true })
-keymap('n', '<C-e>', ':NvimTreeToggle<cr>', { noremap = true, silent = true })
-keymap('n', '<C-b>', ':TroubleToggle<cr>', { noremap = true, silent = true })
-keymap('n', 'ca', 'z=', { noremap = true, silent = true })
-keymap('n', 'H', ':vertical resize -10<cr>', { noremap = true, silent = true })
-keymap('n', 'J', ':resize -10<cr>', { noremap = true, silent = true })
-keymap('n', 'K', ':resize +10<cr>', { noremap = true, silent = true })
-keymap('n', 'L', ':vertical resize +10<cr>', { noremap = true, silent = true })
-keymap('n', 'd', '"_d', { noremap = true, silent = true })
-keymap('x', 'd', '"_d', { noremap = true, silent = true })
-keymap('x', 'p', '"_dP', { noremap = true, silent = true })
-keymap('n', 'c', '"_c', { noremap = true, silent = true })
-keymap('n', '<C-A>', 'v/{<cr>%', { noremap = true, silent = true })
-keymap('n', '<A-,>', '<Cmd>BufferPrevious<cr>', { noremap = true, silent = true })
-keymap('n', '<A-.>', '<Cmd>BufferNext<cr>', { noremap = true, silent = true })
-keymap('n', '<A-<>', '<Cmd>BufferMovePrevious<cr>', { noremap = true, silent = true })
-keymap('n', '<A->>', '<Cmd>BufferMoveNext<cr>', { noremap = true, silent = true })
-keymap('n', '<A-1>', '<Cmd>BufferGoto 1<cr>', { noremap = true, silent = true })
-keymap('n', '<A-2>', '<Cmd>BufferGoto 2<cr>', { noremap = true, silent = true })
-keymap('n', '<A-3>', '<Cmd>BufferGoto 3<cr>', { noremap = true, silent = true })
-keymap('n', '<A-4>', '<Cmd>BufferGoto 4<cr>', { noremap = true, silent = true })
-keymap('n', '<A-5>', '<Cmd>BufferGoto 5<cr>', { noremap = true, silent = true })
-keymap('n', '<A-6>', '<Cmd>BufferGoto 6<cr>', { noremap = true, silent = true })
-keymap('n', '<A-7>', '<Cmd>BufferGoto 7<cr>', { noremap = true, silent = true })
-keymap('n', '<A-8>', '<Cmd>BufferGoto 8<cr>', { noremap = true, silent = true })
-keymap('n', '<A-9>', '<Cmd>BufferGoto 9<cr>', { noremap = true, silent = true })
-keymap('n', '<A-0>', '<Cmd>BufferLast<cr>', { noremap = true, silent = true })
-keymap('n', '<A-p>', '<Cmd>BufferPin<cr>', { noremap = true, silent = true })
-keymap('n', '<A-c>', '<Cmd>BufferClose<cr>', { noremap = true, silent = true })
-keymap('n', '<Space>bb', '<Cmd>BufferOrderByBufferNumber<cr>', { noremap = true, silent = true })
-keymap('n', '<Space>bd', '<Cmd>BufferOrderByDirectory<cr>', { noremap = true, silent = true })
-keymap('n', '<Space>bl', '<Cmd>BufferOrderByLanguage<cr>', { noremap = true, silent = true })
-keymap('n', '<Space>bw', '<Cmd>BufferOrderByWindowNumber<cr>', { noremap = true, silent = true })
+-- Keybinds for handling splits
+keymap('n', '<C-h>',      '<C-w>h',                                  defaultKeybindOptions)
+keymap('n', '<C-j>',      '<C-w>j',                                  defaultKeybindOptions)
+keymap('n', '<C-k>',      '<C-w>k',                                  defaultKeybindOptions)
+keymap('n', '<C-l>',      '<C-w>l',                                  defaultKeybindOptions)
+keymap('n', '<C-s>',      '<cmd>split<cr>',                          defaultKeybindOptions)
+keymap('n', '<C-w>',      '<cmd>vsplit<cr>',                         defaultKeybindOptions)
+keymap('n', '<C-q>',      '<cmd>only<cr>',                           defaultKeybindOptions)
+keymap('n', '<C-t>',      '<cmd>term<cr>',                           defaultKeybindOptions)
+keymap('n', '<C-f>',      '<cmd>Telescope fd<cr>',                   defaultKeybindOptions)
+keymap('n', 'H',          '<cmd>vertical resize -10<cr>',            defaultKeybindOptions)
+keymap('n', 'J',          '<cmd>resize -10<cr>',                     defaultKeybindOptions)
+keymap('n', 'K',          '<cmd>resize +10<cr>',                     defaultKeybindOptions)
+keymap('n', 'L',          '<cmd>vertical resize +10<cr>',            defaultKeybindOptions)
 
+-- Keybinds for language/spell
+keymap('n', '<F2>',       '<cmd>set spell!<cr>',                     defaultKeybindOptions)
+keymap('n', '<F3>',       '<cmd>set spelllang=en_us<cr>',            defaultKeybindOptions)
+keymap('n', '<F4>',       '<cmd>set spelllang=sv_se<cr>',            defaultKeybindOptions)
+keymap('n', '<F7>',       '<cmd>silent execute "!setxkbmap us"<cr>', defaultKeybindOptions)
+keymap('n', '<F8>',       '<cmd>silent execute "!setxkbmap se"<cr>', defaultKeybindOptions)
+keymap('n', 'ca',         'z=',                                      defaultKeybindOptions)
+
+-- Miscellanious
+keymap('n', 'd',          '"_d',                                     defaultKeybindOptions)
+keymap('x', 'd',          '"_d',                                     defaultKeybindOptions)
+keymap('x', 'p',          '"_dP',                                    defaultKeybindOptions)
+keymap('n', 'c',          '"_c',                                     defaultKeybindOptions)
+keymap('n', 'ZX',         '<cmd>q!<cr>',                             defaultKeybindOptions)
+keymap('n', '<C-A>',      'v/{<cr>%',                                defaultKeybindOptions)
+keymap('n', '<C-e>',      '<cmd>NvimTreeToggle<cr>',                 defaultKeybindOptions)
+keymap('n', '<C-b>',      '<cmd>TroubleToggle<cr>',                  defaultKeybindOptions)
+
+-- Keybinds for handling tabs
+keymap('n', '<A-,>',      '<cmd>BufferPrevious<cr>',                 defaultKeybindOptions)
+keymap('n', '<A-.>',      '<cmd>BufferNext<cr>',                     defaultKeybindOptions)
+keymap('n', '<A-<>',      '<cmd>BufferMovePrevious<cr>',             defaultKeybindOptions)
+keymap('n', '<A->>',      '<cmd>BufferMoveNext<cr>',                 defaultKeybindOptions)
+keymap('n', '<A-1>',      '<cmd>BufferGoto 1<cr>',                   defaultKeybindOptions)
+keymap('n', '<A-2>',      '<cmd>BufferGoto 2<cr>',                   defaultKeybindOptions)
+keymap('n', '<A-3>',      '<cmd>BufferGoto 3<cr>',                   defaultKeybindOptions)
+keymap('n', '<A-4>',      '<cmd>BufferGoto 4<cr>',                   defaultKeybindOptions)
+keymap('n', '<A-5>',      '<cmd>BufferGoto 5<cr>',                   defaultKeybindOptions)
+keymap('n', '<A-6>',      '<cmd>BufferGoto 6<cr>',                   defaultKeybindOptions)
+keymap('n', '<A-7>',      '<cmd>BufferGoto 7<cr>',                   defaultKeybindOptions)
+keymap('n', '<A-8>',      '<cmd>BufferGoto 8<cr>',                   defaultKeybindOptions)
+keymap('n', '<A-9>',      '<cmd>BufferGoto 9<cr>',                   defaultKeybindOptions)
+keymap('n', '<A-0>',      '<cmd>BufferLast<cr>',                     defaultKeybindOptions)
+keymap('n', '<A-p>',      '<cmd>BufferPin<cr>',                      defaultKeybindOptions)
+keymap('n', '<A-c>',      '<cmd>BufferClose<cr>',                    defaultKeybindOptions)
+keymap('n', '<leader>bb', '<cmd>BufferOrderByBufferNumber<cr>',      defaultKeybindOptions)
+keymap('n', '<leader>bd', '<cmd>BufferOrderByDirectory<cr>',         defaultKeybindOptions)
+keymap('n', '<leader>bl', '<cmd>BufferOrderByLanguage<cr>',          defaultKeybindOptions)
+keymap('n', '<leader>bw', '<cmd>BufferOrderByWindowNumber<cr>',      defaultKeybindOptions)
 
 autocmd('BufWritePre', { -- Remove trailing spaces
     pattern = { '*' },
@@ -177,25 +182,6 @@ autocmd('BufWritePre', { -- Replace four spaces with tabs in Makefiles
         vim.cmd("autocmd BufWritePre Makefile %s/    /\t/e")
     end,
 })
-autocmd('VimEnter', { -- Restore session on load
-    pattern = { '*' },
-    callback = function()
-        local _sessionFile = vim.fn.expand(sessionFile)
-        if vim.fn.argc() == 0 then
-            if vim.fn.filereadable(_sessionFile) == 1 then
-                vim.cmd('source ' .. _sessionFile)
-                vim.cmd("filetype detect")
-            end
-        end
-    end,
-})
-autocmd('VimLeave', { -- Save session on exit
-    pattern = { '*' },
-    callback = function()
-        local _sessionFile = vim.fn.expand(sessionFile)
-        vim.cmd('mksession! ' .. _sessionFile)
-    end,
-})
 
 -- Set up various plugins
 require('conform_config')
@@ -208,3 +194,4 @@ require('ts_config')
 require('theme_config')
 require('trouble_config')
 require('translate_config')
+require('session_manager')

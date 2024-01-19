@@ -3,6 +3,10 @@
     -- https://git.speedie.site/speedie/speedie-nvim --
 ]]--
 
+vim.api.nvim_set_keymap('', LeaderKey, '<Nop>', { noremap = true, silent = true })
+vim.g.mapleader = LeaderKey
+vim.g.maplocalleader = LeaderKey
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
