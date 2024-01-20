@@ -1,6 +1,7 @@
 # speedie-nvim
 
-![img](/preview.png)
+![img](/screenshots/scr0.png)
+![img](/screenshots/scr1.png)
 
 My personal neovim configuration. Designed to be an IDE replacement for me.
 If you prefer something lighter, check out my [speedie-vim](https://git.speedie.site/speedie/speedie-vim) configuration instead.
@@ -12,7 +13,7 @@ can change whenever I feel like it. **This is not a NeoVim distro.**
 
 - Fully configured in Lua
 - Easy, clean and concise configuration file
-- Neovim-native LSP for different languages (default: HTML, CSS, C, C++, PHP, Lua, VimScript and Markdown) (using lsp-zero)
+- Neovim-native LSP for different languages (default: HTML, CSS, C, C++, PHP, Lua and Markdown) (using lsp-zero)
 - Language syntax highlighting (using Treesitter)
 - Tabs (using barbar)
 - Doom-One colorscheme (using doom-one.vim)
@@ -29,6 +30,7 @@ can change whenever I feel like it. **This is not a NeoVim distro.**
 - curl.
 - Good internet connection so you can download things.
 - Preferably also nerd fonts, or stuff might look a bit weird.
+  - To install them, you can use the included `install_fonts.sh` script.
 
 ## Installation
 

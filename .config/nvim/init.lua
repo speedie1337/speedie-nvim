@@ -4,15 +4,15 @@
 ]]--
 
 local opt = vim.opt -- Convenient alias
-local highlight = vim.api.nvim_set_hl -- Convenient alias
 local keymap = vim.api.nvim_set_keymap -- Convenient alias
 local autocmd = vim.api.nvim_create_autocmd -- Convenient alias
 local defaultKeybindOptions = { noremap = true, silent = true } -- Default keybind options
 
 LoadPreviousSessionOnLoad = true -- Load previous session or not
 SessionFile = '~/.config/nvim/.session.nvim' -- File where the previous buffer is stored
-LeaderKey = ' ' -- The leader key to use. Default is the space key.
-Theme = 'onenord' -- Theme to use
+LeaderKey = ' ' -- The leader key to use.
+MaxAccelerationSpeed = 300 -- Max speed for j/k/gj/gk bindings.
+Theme = 'oxocarbon' -- Theme to use
 Languages = { -- Languages to support - Used to configure highlighting
     'html', -- For HTML
     'css', -- For CSS
@@ -31,8 +31,9 @@ LanguageServers = { -- Language servers to use for LSP, run LspInstall <lang> to
     'marksman', -- For Markdown
 }
 Themes = {
-    { 'rmehri01/onenord.nvim', branch = 'main'  }, -- One Nord theme
+    { 'nyoom-engineering/oxocarbon.nvim' }, -- Oxocarbon
     --[[
+    { 'rmehri01/onenord.nvim', branch = 'main'  }, -- One Nord theme
     { 'romgrk/doom-one.vim' }, -- Doom-One theme
     { 'catppuccin/nvim' }, -- Catppuccin theme(s)
     ]]--
@@ -48,7 +49,7 @@ Plugins = { -- Plugins to use
     { 'nvim-lualine/lualine.nvim' }, -- Status line
     { 'm4xshen/autoclose.nvim' }, -- Autoclose brackets
     { 'stevearc/conform.nvim' }, -- Formatting
-    { 'tpope/vim-fugitive' }, -- Git integration
+    { 'dinhhuy258/git.nvim' }, -- Git integration
     { 'lewis6991/gitsigns.nvim' }, -- Provides Git icons
     { 'nvim-tree/nvim-web-devicons' }, -- Provides general icons
     { 'williamboman/mason.nvim',
@@ -77,9 +78,12 @@ Plugins = { -- Plugins to use
             'MunifTanjim/nui.nvim',
             'rcarriga/nvim-notify',
         },
-        opts = {
-        },
+        opts = {},
     }, -- Message boxes
+    { 'rainbowhxch/accelerated-jk.nvim' }, -- Accelerated movement
+    { 'NvChad/nvim-colorizer.lua' }, -- Colorize #RRGGBB text
+    { 'RRethy/vim-illuminate' }, -- Highlight other instances of the cursor position word
+    { 'LunarVim/bigfile.nvim' }, -- Disable heavy features if the file is big
 }
 
 require('bootstrap') -- Set up Lazy and plugins.
@@ -109,10 +113,9 @@ opt.laststatus = 0 -- Don't display file information
 opt.termguicolors = true -- Enable true color
 opt.autochdir = true -- Automatically change directory to the file we're editing
 opt.background = 'dark' -- Set background to dark
-
--- Enable undercurl
-highlight(0, 'SpellBad', { undercurl=true, fg='#ff0000' })
-highlight(0, 'SpellCap', { undercurl=true, fg='#ffff00' })
+opt.fillchars = {
+    vert = '▏',
+}
 
 -- Keybinds for handling splits
 keymap('n', '<C-h>',      '<C-w>h',                                  defaultKeybindOptions)
@@ -138,11 +141,17 @@ keymap('n', '<F8>',       '<cmd>silent execute "!setxkbmap se"<cr>', defaultKeyb
 keymap('n', 'ca',         'z=',                                      defaultKeybindOptions)
 
 -- Miscellanious
+keymap('n', '<C-n>',      '<cmd>tab :new<cr>',                            defaultKeybindOptions)
+keymap('n', 'j',          '<Plug>(accelerated_jk_j)',                defaultKeybindOptions)
+keymap('n', 'k',          '<Plug>(accelerated_jk_k)',                defaultKeybindOptions)
+keymap('n', 'gj',         '<Plug>(accelerated_jk_gj)',               defaultKeybindOptions)
+keymap('n', 'gk',         '<Plug>(accelerated_jk_gk)',               defaultKeybindOptions)
 keymap('n', 'd',          '"_d',                                     defaultKeybindOptions)
 keymap('x', 'd',          '"_d',                                     defaultKeybindOptions)
 keymap('x', 'p',          '"_dP',                                    defaultKeybindOptions)
 keymap('n', 'c',          '"_c',                                     defaultKeybindOptions)
 keymap('n', 'ZX',         '<cmd>q!<cr>',                             defaultKeybindOptions)
+keymap('n', 'Zz',         '<cmd>w!<cr>',                             defaultKeybindOptions)
 keymap('n', '<C-A>',      'v/{<cr>%',                                defaultKeybindOptions)
 keymap('n', '<C-e>',      '<cmd>NvimTreeToggle<cr>',                 defaultKeybindOptions)
 keymap('n', '<C-b>',      '<cmd>TroubleToggle<cr>',                  defaultKeybindOptions)
@@ -150,6 +159,7 @@ keymap('n', '<C-b>',      '<cmd>TroubleToggle<cr>',                  defaultKeyb
 -- Keybinds for handling tabs
 keymap('n', '<A-,>',      '<cmd>BufferLineCyclePrev<cr>',            defaultKeybindOptions)
 keymap('n', '<A-.>',      '<cmd>BufferLineCycleNext<cr>',            defaultKeybindOptions)
+keymap('n', '<C-Tab>',    '<cmd>BufferLineCycleNext<cr>',            defaultKeybindOptions)
 keymap('n', '<A-<>',      '<cmd>BufferLineMovePrev<cr>',             defaultKeybindOptions)
 keymap('n', '<A->>',      '<cmd>BufferLineMoveNext<cr>',             defaultKeybindOptions)
 keymap('n', '<A-1>',      '<cmd>BufferLineGoToBuffer 1<cr>',         defaultKeybindOptions)
@@ -183,17 +193,3 @@ autocmd('BufWritePre', { -- Replace four spaces with tabs in Makefiles
         vim.cmd("autocmd BufWritePre Makefile %s/    /\t/e")
     end,
 })
-
--- Set up various plugins
-require('conform_config')
-require('autoclose_config')
-require('lsp_config')
-require('lualine_config')
-require('ibl_config')
-require('bufferline_config')
-require('tree_config')
-require('ts_config')
-require('theme_config')
-require('trouble_config')
-require('translate_config')
-require('session_manager')

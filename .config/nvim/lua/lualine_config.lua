@@ -10,15 +10,17 @@ local lualine = require('lualine')
 local colors = {
     bg           = '#202328',
     fg           = '#bbc2cf',
-    yellow     = '#ECBE7B',
+    yellow       = '#ECBE7B',
     cyan         = '#008080',
-    darkblue = '#081633',
+    darkblue     = '#081633',
     green        = '#98be65',
-    orange     = '#FF8800',
-    violet     = '#a9a1e1',
-    magenta    = '#c678dd',
+    orange       = '#FF8800',
+    violet       = '#a9a1e1',
+    magenta      = '#c678dd',
     blue         = '#51afef',
     red          = '#ec5f67',
+    pink         = '#eba8ff',
+    sep          = '#222222',
 }
 
 local conditions = {
@@ -76,9 +78,9 @@ end
 
 ins_left {
     function()
-        return '▊'
+        return ' '
     end,
-    color = { fg = colors.blue }, -- Sets highlighting of component
+    color = { fg = colors.bg }, -- Sets highlighting of component
     padding = { left = 0, right = 1 }, -- We don't need space before this
 }
 
@@ -113,24 +115,55 @@ ins_left {
         }
         return { fg = mode_color[vim.fn.mode()] }
     end,
-    padding = { right = 1 },
+    padding = { right = 0 },
 }
+
+-- Some padding
+ins_left {
+    function()
+        return '▏'
+    end,
+    color = { fg = colors.sep },
+    padding = { left = 3, right = 1 },
+}
+
+--[[ Looks good, but takes up quite a bit of space, so I think I'm good.
+ins_left {
+    'datetime',
+    icons_enabled = true,
+    icon = '󰥔',
+    color = { fg = colors.violet, gui = 'bold' },
+    style = "%T",
+}
+--]]
 
 ins_left {
-    -- filesize component
-    'filesize',
-    cond = conditions.buffer_not_empty,
+    'filetype',
+    fmt = string.upper,
+    icons_enabled = true,
+    icon_only = true,
+    color = { fg = colors.magenta, gui = 'bold' },
 }
-
 ins_left {
     'filename',
     cond = conditions.buffer_not_empty,
+    icons_enabled = false,
     color = { fg = colors.magenta, gui = 'bold' },
 }
 
-ins_left { 'location' }
+ins_left {
+    'location',
+    icons_enabled = true,
+    icon = '';
+    color = { fg = colors.red, gui = 'bold' },
+}
 
-ins_left { 'progress', color = { fg = colors.fg, gui = 'bold' } }
+ins_left {
+    'progress',
+    icons_enabled = true,
+    icon = '󰹺',
+    color = { fg = colors.pink, gui = 'bold' },
+}
 
 ins_left {
     'diagnostics',
@@ -151,19 +184,31 @@ ins_left {
     end,
 }
 
+ins_right {
+    -- search component
+    'searchcount',
+    icons_enabled = true,
+    icon = '',
+    color = { fg = colors.violet, gui = 'bold' },
+}
+
+ins_right {
+    -- filesize component
+    'filesize',
+    icons_enabled = true,
+    icon = '󰉉',
+    color = { fg = colors.orange, gui = 'bold' },
+    cond = conditions.buffer_not_empty,
+}
+
 -- Add components to right sections
 ins_right {
     'o:encoding', -- option component same as &encoding in viml
     fmt = string.upper, -- I'm not sure why it's upper case either ;)
     cond = conditions.hide_in_width,
     color = { fg = colors.green, gui = 'bold' },
-}
-
-ins_right {
-    'fileformat',
-    fmt = string.upper,
-    icons_enabled = false, -- I think icons are cool but Eviline doesn't have them. sigh
-    color = { fg = colors.green, gui = 'bold' },
+    icons_enabled = true,
+    icon = '󰉢';
 }
 
 ins_right {
@@ -174,7 +219,6 @@ ins_right {
 
 ins_right {
     'diff',
-    -- Is it me or the symbol for modified us really weird
     symbols = { added = ' ', modified = '󰝤 ', removed = ' ' },
     diff_color = {
         added = { fg = colors.green },
@@ -185,10 +229,23 @@ ins_right {
 }
 
 ins_right {
+    'fileformat',
+    fmt = string.upper,
+    symbols = {
+        unix = '',
+        dos = '',
+        mac = '',
+    },
+    icons_enabled = true,
+    color = { fg = colors.blue, gui = 'bold' },
+}
+
+-- Some padding
+ins_right {
     function()
-        return '▊'
+        return ' '
     end,
-    color = { fg = colors.blue },
+    color = { fg = colors.bg },
     padding = { left = 1 },
 }
 

@@ -28,3 +28,4 @@ local function combineTable(table1,table2)
 end
 
 require("lazy").setup(combineTable(Plugins, Themes))
+require("setup")
