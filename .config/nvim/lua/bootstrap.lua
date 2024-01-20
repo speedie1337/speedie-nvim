@@ -20,4 +20,11 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup(Plugins)
+local function combineTable(table1,table2)
+    for i=1,#table2 do
+        table1[#table1+1] = table2[i]
+    end
+    return table1
+end
+
+require("lazy").setup(combineTable(Plugins, Themes))

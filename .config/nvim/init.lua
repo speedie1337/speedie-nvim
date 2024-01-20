@@ -12,7 +12,7 @@ local defaultKeybindOptions = { noremap = true, silent = true } -- Default keybi
 LoadPreviousSessionOnLoad = true -- Load previous session or not
 SessionFile = '~/.config/nvim/.session.nvim' -- File where the previous buffer is stored
 LeaderKey = ' ' -- The leader key to use. Default is the space key.
-Theme = 'doom-one' -- Theme to use
+Theme = 'onenord' -- Theme to use
 Languages = { -- Languages to support - Used to configure highlighting
     'html', -- For HTML
     'css', -- For CSS
@@ -30,6 +30,13 @@ LanguageServers = { -- Language servers to use for LSP, run LspInstall <lang> to
     'lua_ls', -- For Lua
     'marksman', -- For Markdown
 }
+Themes = {
+    { 'rmehri01/onenord.nvim', branch = 'main'  }, -- One Nord theme
+    --[[
+    { 'romgrk/doom-one.vim' }, -- Doom-One theme
+    { 'catppuccin/nvim' }, -- Catppuccin theme(s)
+    ]]--
+} -- Themes to download as plugins
 Plugins = { -- Plugins to use
     { 'nvim-telescope/telescope.nvim',
         dependencies = {
@@ -40,7 +47,6 @@ Plugins = { -- Plugins to use
     { 'akinsho/bufferline.nvim' }, -- Tabs
     { 'nvim-lualine/lualine.nvim' }, -- Status line
     { 'm4xshen/autoclose.nvim' }, -- Autoclose brackets
-    { 'romgrk/doom-one.vim' }, -- Doom-One theme
     { 'stevearc/conform.nvim' }, -- Formatting
     { 'tpope/vim-fugitive' }, -- Git integration
     { 'lewis6991/gitsigns.nvim' }, -- Provides Git icons
@@ -104,10 +110,7 @@ opt.termguicolors = true -- Enable true color
 opt.autochdir = true -- Automatically change directory to the file we're editing
 opt.background = 'dark' -- Set background to dark
 
--- Fallback colors and undercurl, if supported
-highlight(0, 'Normal', { fg='#ffffff', bg='#222222' })
-highlight(0, 'EndOfBuffer', { fg='#ffffff', bg='#222222' })
-highlight(0, 'Folded', { fg='#afeeee', bg='#333333' })
+-- Enable undercurl
 highlight(0, 'SpellBad', { undercurl=true, fg='#ff0000' })
 highlight(0, 'SpellCap', { undercurl=true, fg='#ffff00' })
 
