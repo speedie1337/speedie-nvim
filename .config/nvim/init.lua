@@ -9,7 +9,7 @@ local keymap = vim.api.nvim_set_keymap -- Convenient alias
 local autocmd = vim.api.nvim_create_autocmd -- Convenient alias
 local defaultKeybindOptions = { noremap = true, silent = true } -- Default keybind options
 
-LoadPreviousSessionOnLoad = false -- Load previous session or not
+LoadPreviousSessionOnLoad = true -- Load previous session or not
 SessionFile = '~/.config/nvim/.session.nvim' -- File where the previous buffer is stored
 LeaderKey = ' ' -- The leader key to use. Default is the space key.
 Theme = 'doom-one' -- Theme to use
@@ -37,20 +37,14 @@ Plugins = { -- Plugins to use
         },
     }, -- Fuzzy-finding
     { 'nvim-treesitter/nvim-treesitter' }, -- Better syntax highlighting
+    { 'akinsho/bufferline.nvim' }, -- Tabs
     { 'nvim-lualine/lualine.nvim' }, -- Status line
     { 'm4xshen/autoclose.nvim' }, -- Autoclose brackets
     { 'romgrk/doom-one.vim' }, -- Doom-One theme
     { 'stevearc/conform.nvim' }, -- Formatting
     { 'tpope/vim-fugitive' }, -- Git integration
-    { 'romgrk/barbar.nvim',
-        dependencies = {
-            'lewis6991/gitsigns.nvim',
-            'nvim-tree/nvim-web-devicons',
-        }, opts = {
-            clickable = true,
-            animation = true,
-            focus_on_close = 'left',
-        } }, -- Tabs
+    { 'lewis6991/gitsigns.nvim' }, -- Provides Git icons
+    { 'nvim-tree/nvim-web-devicons' }, -- Provides general icons
     { 'williamboman/mason.nvim',
         dependencies = {
             'williamboman/mason-lspconfig.nvim',
@@ -72,6 +66,14 @@ Plugins = { -- Plugins to use
     }, -- Indentation blankline
     { 'folke/trouble.nvim' }, -- Display warnings and errors neatly
     { 'uga-rosa/translate.nvim' }, -- Built in translate
+    { 'folke/noice.nvim', event = "VeryLazy",
+        dependencies = {
+            'MunifTanjim/nui.nvim',
+            'rcarriga/nvim-notify',
+        },
+        opts = {
+        },
+    }, -- Message boxes
 }
 
 require('bootstrap') -- Set up Lazy and plugins.
@@ -143,26 +145,22 @@ keymap('n', '<C-e>',      '<cmd>NvimTreeToggle<cr>',                 defaultKeyb
 keymap('n', '<C-b>',      '<cmd>TroubleToggle<cr>',                  defaultKeybindOptions)
 
 -- Keybinds for handling tabs
-keymap('n', '<A-,>',      '<cmd>BufferPrevious<cr>',                 defaultKeybindOptions)
-keymap('n', '<A-.>',      '<cmd>BufferNext<cr>',                     defaultKeybindOptions)
-keymap('n', '<A-<>',      '<cmd>BufferMovePrevious<cr>',             defaultKeybindOptions)
-keymap('n', '<A->>',      '<cmd>BufferMoveNext<cr>',                 defaultKeybindOptions)
-keymap('n', '<A-1>',      '<cmd>BufferGoto 1<cr>',                   defaultKeybindOptions)
-keymap('n', '<A-2>',      '<cmd>BufferGoto 2<cr>',                   defaultKeybindOptions)
-keymap('n', '<A-3>',      '<cmd>BufferGoto 3<cr>',                   defaultKeybindOptions)
-keymap('n', '<A-4>',      '<cmd>BufferGoto 4<cr>',                   defaultKeybindOptions)
-keymap('n', '<A-5>',      '<cmd>BufferGoto 5<cr>',                   defaultKeybindOptions)
-keymap('n', '<A-6>',      '<cmd>BufferGoto 6<cr>',                   defaultKeybindOptions)
-keymap('n', '<A-7>',      '<cmd>BufferGoto 7<cr>',                   defaultKeybindOptions)
-keymap('n', '<A-8>',      '<cmd>BufferGoto 8<cr>',                   defaultKeybindOptions)
-keymap('n', '<A-9>',      '<cmd>BufferGoto 9<cr>',                   defaultKeybindOptions)
-keymap('n', '<A-0>',      '<cmd>BufferLast<cr>',                     defaultKeybindOptions)
-keymap('n', '<A-p>',      '<cmd>BufferPin<cr>',                      defaultKeybindOptions)
-keymap('n', '<A-c>',      '<cmd>BufferClose<cr>',                    defaultKeybindOptions)
-keymap('n', '<leader>bb', '<cmd>BufferOrderByBufferNumber<cr>',      defaultKeybindOptions)
-keymap('n', '<leader>bd', '<cmd>BufferOrderByDirectory<cr>',         defaultKeybindOptions)
-keymap('n', '<leader>bl', '<cmd>BufferOrderByLanguage<cr>',          defaultKeybindOptions)
-keymap('n', '<leader>bw', '<cmd>BufferOrderByWindowNumber<cr>',      defaultKeybindOptions)
+keymap('n', '<A-,>',      '<cmd>BufferLineCyclePrev<cr>',            defaultKeybindOptions)
+keymap('n', '<A-.>',      '<cmd>BufferLineCycleNext<cr>',            defaultKeybindOptions)
+keymap('n', '<A-<>',      '<cmd>BufferLineMovePrev<cr>',             defaultKeybindOptions)
+keymap('n', '<A->>',      '<cmd>BufferLineMoveNext<cr>',             defaultKeybindOptions)
+keymap('n', '<A-1>',      '<cmd>BufferLineGoToBuffer 1<cr>',         defaultKeybindOptions)
+keymap('n', '<A-2>',      '<cmd>BufferLineGoToBuffer 2<cr>',         defaultKeybindOptions)
+keymap('n', '<A-3>',      '<cmd>BufferLineGoToBuffer 3<cr>',         defaultKeybindOptions)
+keymap('n', '<A-4>',      '<cmd>BufferLineGoToBuffer 4<cr>',         defaultKeybindOptions)
+keymap('n', '<A-5>',      '<cmd>BufferLineGoToBuffer 5<cr>',         defaultKeybindOptions)
+keymap('n', '<A-6>',      '<cmd>BufferLineGoToBuffer 6<cr>',         defaultKeybindOptions)
+keymap('n', '<A-7>',      '<cmd>BufferLineGoToBuffer 7<cr>',         defaultKeybindOptions)
+keymap('n', '<A-8>',      '<cmd>BufferLineGoToBuffer 8<cr>',         defaultKeybindOptions)
+keymap('n', '<A-9>',      '<cmd>BufferLineGoToBuffer 9<cr>',         defaultKeybindOptions)
+keymap('n', '<A-0>',      '<cmd>BufferLineGoToBuffer -1<cr>',        defaultKeybindOptions)
+keymap('n', '<A-p>',      '<cmd>BufferLineTogglePin<cr>',            defaultKeybindOptions)
+keymap('n', '<A-c>',      '<cmd>bdelete<cr>',                        defaultKeybindOptions)
 
 autocmd('BufWritePre', { -- Remove trailing spaces
     pattern = { '*' },
@@ -189,6 +187,7 @@ require('autoclose_config')
 require('lsp_config')
 require('lualine_config')
 require('ibl_config')
+require('bufferline_config')
 require('tree_config')
 require('ts_config')
 require('theme_config')
