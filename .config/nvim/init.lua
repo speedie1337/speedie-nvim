@@ -21,6 +21,7 @@ Languages = { -- Languages to support - Used to configure highlighting
     'php', -- For PHP
     'lua', -- For Lua
     'markdown', -- For Markdown
+    'meson', -- For meson
 }
 LanguageServers = { -- Language servers to use for LSP, run LspInstall <lang> to see available servers
     'html', -- For HTML
@@ -29,6 +30,7 @@ LanguageServers = { -- Language servers to use for LSP, run LspInstall <lang> to
     'phpactor', -- For PHP
     'lua_ls', -- For Lua
     'marksman', -- For Markdown
+    'swift_mesonls', -- For meson
 }
 Themes = {
     { 'nyoom-engineering/oxocarbon.nvim' }, -- Oxocarbon
@@ -83,6 +85,7 @@ Plugins = { -- Plugins to use
     { 'rainbowhxch/accelerated-jk.nvim' }, -- Accelerated movement
     { 'NvChad/nvim-colorizer.lua' }, -- Colorize #RRGGBB text
     { 'RRethy/vim-illuminate' }, -- Highlight other instances of the cursor position word
+    { 'stevearc/aerial.nvim' }, -- Object viewer
     { 'LunarVim/bigfile.nvim' }, -- Disable heavy features if the file is big
 }
 
@@ -154,7 +157,8 @@ keymap('n', 'ZX',         '<cmd>q!<cr>',                             defaultKeyb
 keymap('n', 'Zz',         '<cmd>w!<cr>',                             defaultKeybindOptions)
 keymap('n', '<C-A>',      'v/{<cr>%',                                defaultKeybindOptions)
 keymap('n', '<C-e>',      '<cmd>NvimTreeToggle<cr>',                 defaultKeybindOptions)
-keymap('n', '<C-b>',      '<cmd>TroubleToggle<cr>',                  defaultKeybindOptions)
+keymap('n', '.',          '<cmd>TroubleToggle<cr>',                  defaultKeybindOptions)
+keymap('n', ',',          '<cmd>AerialToggle<cr>',                   defaultKeybindOptions)
 
 -- Keybinds for handling tabs
 keymap('n', '<A-,>',      '<cmd>BufferLineCyclePrev<cr>',            defaultKeybindOptions)

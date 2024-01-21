@@ -212,6 +212,14 @@ ins_right {
 }
 
 ins_right {
+    'aerial',
+    sep = " ) ",
+    depth = nil,
+    colored = false,
+    color = { fg = colors.pink, gui = 'bold' },
+}
+
+ins_right {
     'branch',
     icon = '',
     color = { fg = colors.violet, gui = 'bold' },
