@@ -32,12 +32,16 @@ can change whenever I feel like it. **This is not a NeoVim distro.**
 - Preferably also nerd fonts, or stuff might look a bit weird.
   - To install them, you can use the included `install_fonts.sh` script.
 
-## Installation
+## Installation (Linux/macOS/BSD)
 
 Run ./install.sh. Note that this will remove your
 existing Neovim configuration so if you care about it, back it up before running the script.
 
 To uninstall, simply remove ~/.config/nvim/ (and optionally ~/.local/share/nvim)
+
+## Installation (Windows)
+
+Run .\install.ps1. Yes, this will also remove your existing Neovim configuration.
 
 ## Fork
 
