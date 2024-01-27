@@ -112,7 +112,6 @@ opt.softtabstop = 4 -- Display a tab (\t) as 4 spaces
 opt.shiftwidth = 4 -- Indents for << or >>
 opt.spellsuggest = 'best,5' -- Prefer the best suggestions
 opt.foldmethod = 'indent' -- Fold based on indents
-opt.laststatus = 0 -- Don't display file information
 opt.termguicolors = true -- Enable true color
 opt.autochdir = true -- Automatically change directory to the file we're editing
 opt.background = 'dark' -- Set background to dark
