@@ -31,6 +31,12 @@ local kindIcons = {
     TypeParameter = "",
 }
 
+vim.fn.sign_define('DiagnosticSignError', {text = '', numhl = 'DiagnosticDefaultError'})
+vim.fn.sign_define('DiagnosticSignInformation', {text = '', numhl = 'DiagnosticDefaultInformation'})
+vim.fn.sign_define('DiagnosticSignHint', {text = '', numhl = 'DiagnosticDefaultHint'})
+vim.fn.sign_define('DiagnosticSignInfo', {text = '', numhl = 'DiagnosticDefaultInfo'})
+vim.fn.sign_define('DiagnosticSignWarn', {text = '', numhl = 'DiagnosticDefaultWarn'})
+
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP actions',
   callback = function(event)
