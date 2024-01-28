@@ -13,7 +13,7 @@ can change whenever I feel like it. **This is not a NeoVim distro.**
 
 - Fully configured in Lua
 - Easy, clean and concise configuration file
-- Neovim-native LSP for different languages (default: HTML, CSS, C, C++, PHP, Lua and Markdown) (using lsp-zero)
+- Neovim-native LSP for different languages (default: HTML, CSS, C, C++, PHP, Lua and Markdown)
 - Language syntax highlighting (using Treesitter)
 - Tabs (using barbar)
 - Doom-One colorscheme (using doom-one.vim)
