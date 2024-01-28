@@ -3,15 +3,98 @@
     -- https://git.speedie.site/speedie/speedie-nvim --
 ]]--
 
-if vim.fn.has('nvim-0.8') == 1 or vim.fn.has('nvim-0.9') == 1 or vim.fn.has('nvim-1') == 1 then
-    local lsp_zero = require('lsp-zero')
-    lsp_zero.on_attach(function(client, bufnr) lsp_zero.default_keymaps({buffer = bufnr}) end)
+local kindIcons = {
+    Text = "󰉿",
+    Method = "󰆧",
+    Function = "󰊕",
+    Constructor = "",
+    Field = "󰜢",
+    Variable = "󰀫",
+    Class = "󰠱",
+    Interface = "",
+    Module = "",
+    Property = "󰜢",
+    Unit = "󰑭",
+    Value = "󰎠",
+    Enum = "",
+    Keyword = "󰌋",
+    Snippet = "",
+    Color = "󰏘",
+    File = "󰈙",
+    Reference = "󰈇",
+    Folder = "󰉋",
+    EnumMember = "",
+    Constant = "󰏿",
+    Struct = "󰙅",
+    Event = "",
+    Operator = "󰆕",
+    TypeParameter = "",
+}
 
-    require('mason').setup({})
+vim.api.nvim_create_autocmd('LspAttach', {
+  desc = 'LSP actions',
+  callback = function(event)
+    local opts = { buffer = event.buf }
 
-    if next(LanguageServers) == nil then
-        require('mason-lspconfig').setup({handlers = { lsp_zero.default_setup }})
-    else
-        require('mason-lspconfig').setup({handlers = { lsp_zero.default_setup }, ensure_installed = LanguageServers})
-    end
+    vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
+    vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
+    vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
+    vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
+    vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
+    vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
+    vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
+    vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+    vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
+    vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+  end
+})
+
+local defaultSetup = function(server)
+    require('lspconfig')[server].setup({
+        capabilities = require('cmp_nvim_lsp').default_capabilities(),
+    })
 end
+
+require('mason').setup({})
+
+if next(LanguageServers) == nil then
+    require('mason-lspconfig').setup({handlers = { defaultSetup }})
+else
+    require('mason-lspconfig').setup({handlers = { defaultSetup }, ensure_installed = LanguageServers})
+end
+
+local cmp = require('cmp')
+
+cmp.setup({
+    sources = {
+        { name = 'nvim_lsp' },
+    },
+
+    mapping = cmp.mapping.preset.insert({
+        ['<CR>'] = cmp.mapping.confirm({select = true}),
+        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<Tab>'] = cmp.mapping.confirm({select = true}),
+    }),
+    snippet = {
+        expand = function(args)
+            require('luasnip').lsp_expand(args.body)
+        end,
+    },
+    formatting = {
+        format = function(entry, vim_item)
+            vim_item.kind = string.format('%s %s', kindIcons[vim_item.kind], vim_item.kind)
+            vim_item.menu = ({
+                buffer = "Buffer",
+                nvim_lsp = "LSP",
+                luasnip = "LuaSnip",
+                nvim_lua = "Lua",
+                latex_symbols = "LaTeX",
+            })[entry.source.name]
+
+            return vim_item
+        end,
+    },
+    experimental = {
+        ghost_text = true,
+    },
+})
