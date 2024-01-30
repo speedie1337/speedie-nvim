@@ -3,7 +3,7 @@
     -- https://git.speedie.site/speedie/speedie-nvim --
 ]]--
 
-require'nvim-treesitter.configs'.setup {
+require('nvim-treesitter.configs').setup {
   ensure_installed = Languages,
   sync_install = false,
   auto_install = true,
@@ -19,6 +19,6 @@ require'nvim-treesitter.configs'.setup {
         end
     end,
 
-    additional_vim_regex_highlighting = false,
+    additional_vim_regex_highlighting = true,
   },
 }

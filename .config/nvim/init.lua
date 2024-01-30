@@ -9,7 +9,8 @@ local autocmd = vim.api.nvim_create_autocmd -- Convenient alias
 local defaultKeybindOptions = { noremap = true, silent = true } -- Default keybind options
 
 LoadPreviousSessionOnLoad = true -- Load previous session or not
-SessionFile = '~/.config/nvim/.session.nvim' -- File where the previous buffer is stored
+EnableImageSupport = true -- Enable image support or not
+ImageBackend = 'kitty' -- Image backend to support (kitty/ueberzug)
 LeaderKey = ' ' -- The leader key to use.
 MaxAccelerationSpeed = 300 -- Max speed for j/k/gj/gk bindings.
 Theme = 'oxocarbon' -- Theme to use
@@ -21,6 +22,7 @@ Languages = { -- Languages to support - Used to configure highlighting
     'php', -- For PHP
     'lua', -- For Lua
     'markdown', -- For Markdown
+    'markdown_inline', -- Also for Markdown
     'meson', -- For meson
 }
 LanguageServers = { -- Language servers to use for LSP, run LspInstall <lang> to see available servers
@@ -46,12 +48,20 @@ Plugins = { -- Plugins to use
             'nvim-lua/plenary.nvim',
         },
     }, -- Fuzzy-finding
+    { '3rd/image.nvim' }, -- Images in Neovim
     { 'nvim-treesitter/nvim-treesitter' }, -- Better syntax highlighting
     { 'akinsho/bufferline.nvim' }, -- Tabs
     { 'nvim-lualine/lualine.nvim' }, -- Status line
     { 'm4xshen/autoclose.nvim' }, -- Autoclose brackets
     { 'stevearc/conform.nvim' }, -- Formatting
     { 'dinhhuy258/git.nvim' }, -- Git integration
+    { 'NeogitOrg/neogit',
+        dependencies = {
+            'nvim-lua/plenary.nvim',
+            'sindrets/diffview.nvim',
+            'nvim-telescope/telescope.nvim',
+        },
+    },
     { 'lewis6991/gitsigns.nvim' }, -- Provides Git icons
     { 'nvim-tree/nvim-web-devicons' }, -- Provides general icons
     { 'williamboman/mason.nvim',
@@ -71,12 +81,11 @@ Plugins = { -- Plugins to use
     }, -- Indentation blankline
     { 'folke/trouble.nvim' }, -- Display warnings and errors neatly
     { 'uga-rosa/translate.nvim' }, -- Built in translate
-    { 'folke/noice.nvim', event = "VeryLazy",
+    { 'folke/noice.nvim', event = 'VeryLazy',
         dependencies = {
             'MunifTanjim/nui.nvim',
             'rcarriga/nvim-notify',
         },
-        opts = {},
     }, -- Message boxes
     { 'rainbowhxch/accelerated-jk.nvim' }, -- Accelerated movement
     { 'NvChad/nvim-colorizer.lua' }, -- Colorize #RRGGBB text
@@ -139,7 +148,7 @@ keymap('n', '<F8>',       '<cmd>silent execute "!setxkbmap se"<cr>', defaultKeyb
 keymap('n', 'ca',         'z=',                                      defaultKeybindOptions)
 
 -- Miscellanious
-keymap('n', '<C-n>',      '<cmd>tab :new<cr>',                            defaultKeybindOptions)
+keymap('n', '<C-n>',      '<cmd>tab :new<cr>',                       defaultKeybindOptions)
 keymap('n', 'j',          '<Plug>(accelerated_jk_j)',                defaultKeybindOptions)
 keymap('n', 'k',          '<Plug>(accelerated_jk_k)',                defaultKeybindOptions)
 keymap('n', 'gj',         '<Plug>(accelerated_jk_gj)',               defaultKeybindOptions)
@@ -154,6 +163,7 @@ keymap('n', '<C-A>',      'v/{<cr>%',                                defaultKeyb
 keymap('n', '<C-e>',      '<cmd>NvimTreeToggle<cr>',                 defaultKeybindOptions)
 keymap('n', '.',          '<cmd>TroubleToggle<cr>',                  defaultKeybindOptions)
 keymap('n', ',',          '<cmd>AerialToggle<cr>',                   defaultKeybindOptions)
+keymap('n', '<leader>g',  '<cmd>Neogit<cr>',                         defaultKeybindOptions)
 
 -- Keybinds for handling tabs
 keymap('n', '<A-,>',      '<cmd>BufferLineCyclePrev<cr>',            defaultKeybindOptions)
@@ -177,18 +187,12 @@ keymap('n', '<A-c>',      '<cmd>bdelete<cr>',                        defaultKeyb
 autocmd('BufWritePre', { -- Remove trailing spaces
     pattern = { '*' },
     callback = function()
-        vim.cmd("%s/\\s\\+$//e")
+        vim.cmd('%s/\\s\\+$//e')
     end,
 })
 autocmd('BufReadPre', { -- Enable spell check for all Markdown files
     pattern = { '*.md' },
     callback = function()
-        vim.cmd("set spell")
-    end,
-})
-autocmd('BufWritePre', { -- Replace four spaces with tabs in Makefiles
-    pattern = { 'Makefile' },
-    callback = function()
-        vim.cmd("autocmd BufWritePre Makefile %s/    /\t/e")
+        vim.cmd('set spell')
     end,
 })

@@ -3,6 +3,9 @@
     -- https://git.speedie.site/speedie/speedie-nvim --
 ]]--
 
+-- Hardcoded because I doubt anyone cares to change this.
+SessionFile = vim.fn.stdpath('data') .. '/.session_file.nvim'
+
 if LoadPreviousSessionOnLoad and SessionFile ~= '' then
     vim.api.nvim_create_autocmd('VimEnter', { -- Restore session on load
         pattern = { '*' },

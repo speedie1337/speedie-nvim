@@ -7,14 +7,14 @@ vim.api.nvim_set_keymap('', LeaderKey, '<Nop>', { noremap = true, silent = true 
 vim.g.mapleader = LeaderKey
 vim.g.maplocalleader = LeaderKey
 
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
+    'git',
+    'clone',
+    '--filter=blob:none',
+    'https://github.com/folke/lazy.nvim.git',
+    '--branch=stable', -- latest stable release
     lazypath,
   })
 end
@@ -27,5 +27,9 @@ local function combineTable(table1,table2)
     return table1
 end
 
-require("lazy").setup(combineTable(Plugins, Themes))
-require("setup")
+local lazyOptions = {
+    lockfile = lazypath .. '/lazy-lock.json'
+}
+
+require('lazy').setup(combineTable(combineTable(Plugins, Themes), lazyOptions))
+require('setup')

@@ -2,12 +2,13 @@
 
 ![img](/screenshots/scr0.png)
 ![img](/screenshots/scr1.png)
+![img](/screenshots/scr2.png)
 
 My personal neovim configuration. Designed to be an IDE replacement for me.
 If you prefer something lighter, check out my [speedie-vim](https://git.speedie.site/speedie/speedie-vim) configuration instead.
 
 If you plan on using this, I recommend that you fork it and make it your own rather than relying on upstream which
-can change whenever I feel like it. **This is not a NeoVim distro.**
+can change whenever I feel like it. **This is not a NeoVim distro. It is my opinionated dotfiles for Neovim**
 
 ## Features
 
@@ -18,7 +19,7 @@ can change whenever I feel like it. **This is not a NeoVim distro.**
 - Tabs (using barbar)
 - Doom-One colorscheme (using doom-one.vim)
 - Automatic code formatting (using autoclose, conform, indent-blankline)
-- Git integration (using vim-fugitive)
+- Git integration (using Neogit)
 - Built-in file manager (using nvim-tree)
 - Nice keybinds for working with splits
 - Easy translating (using nvim-translate)

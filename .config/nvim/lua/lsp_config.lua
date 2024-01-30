@@ -61,12 +61,33 @@ local defaultSetup = function(server)
     })
 end
 
+local lua_ls = function()
+    require('lspconfig').lua_ls.setup({
+      capabilities = require('cmp_nvim_lsp').default_capabilities(),
+      settings = {
+        Lua = {
+          runtime = {
+            version = 'LuaJIT'
+          },
+          diagnostics = {
+            globals = {'vim'},
+          },
+          workspace = {
+            library = {
+              vim.env.VIMRUNTIME,
+            }
+          }
+        }
+      }
+    })
+end,
+
 require('mason').setup({})
 
 if next(LanguageServers) == nil then
-    require('mason-lspconfig').setup({handlers = { defaultSetup }})
+    require('mason-lspconfig').setup({handlers = { defaultSetup, lua_ls }})
 else
-    require('mason-lspconfig').setup({handlers = { defaultSetup }, ensure_installed = LanguageServers})
+    require('mason-lspconfig').setup({handlers = { defaultSetup, lua_ls }, ensure_installed = LanguageServers})
 end
 
 local cmp = require('cmp')
