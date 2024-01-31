@@ -220,6 +220,20 @@ ins_right {
 }
 
 ins_right {
+    function()
+        if vim.b.gitsigns_status == nil then
+            return '0'
+        else
+            return vim.b.gitsigns_status
+        end
+    end,
+    color = { fg = colors.orange, gui = 'bold' },
+    icon = '',
+    icons_enabled = true,
+    padding = { left = 1 },
+}
+
+ins_right {
     'branch',
     icon = '',
     color = { fg = colors.violet, gui = 'bold' },
