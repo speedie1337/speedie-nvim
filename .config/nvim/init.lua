@@ -96,8 +96,6 @@ Plugins = { -- Plugins to use
     { 'LunarVim/bigfile.nvim' }, -- Disable heavy features if the file is big
 }
 
-require('bootstrap') -- Set up Lazy and plugins.
-
 opt.title = true -- Display title
 opt.spelllang = 'en_us' -- Use English (United States) as spellcheck language by default
 opt.number = false -- Show line numbers
@@ -206,3 +204,5 @@ autocmd('BufReadPre', { -- Enable spell check for all Markdown files
         vim.cmd('set spell')
     end,
 })
+
+require('bootstrap') -- Set up Lazy and plugins.
