@@ -79,18 +79,20 @@ Plugins = { -- Plugins to use
             'nvim-treesitter/nvim-treesitter',
         },
     }, -- Indentation blankline
-    { 'folke/trouble.nvim' }, -- Display warnings and errors neatly
     { 'uga-rosa/translate.nvim' }, -- Built in translate
+    { 'folke/trouble.nvim' }, -- Display warnings and errors neatly
     { 'folke/noice.nvim', event = 'VeryLazy',
         dependencies = {
             'MunifTanjim/nui.nvim',
             'rcarriga/nvim-notify',
         },
     }, -- Message boxes
+    { 'folke/which-key.nvim' }, -- Display possible keybinds
     { 'rainbowhxch/accelerated-jk.nvim' }, -- Accelerated movement
     { 'NvChad/nvim-colorizer.lua' }, -- Colorize #RRGGBB text
     { 'RRethy/vim-illuminate' }, -- Highlight other instances of the cursor position word
     { 'stevearc/aerial.nvim' }, -- Object viewer
+    { 'caenrique/swap-buffers.nvim' }, -- Swap buffers
     { 'LunarVim/bigfile.nvim' }, -- Disable heavy features if the file is big
 }
 
@@ -98,6 +100,7 @@ require('bootstrap') -- Set up Lazy and plugins.
 
 opt.title = true -- Display title
 opt.spelllang = 'en_us' -- Use English (United States) as spellcheck language by default
+opt.number = false -- Show line numbers
 opt.relativenumber = true -- Show relative line numbers
 opt.mouse = 'a' -- Enable mouse
 opt.clipboard = 'unnamedplus' -- Use system clipboard
@@ -109,7 +112,9 @@ opt.hlsearch = false -- Don't highlight searches
 opt.smartindent = true -- Automatically indent the next line
 opt.autoindent = true -- Pretty much same for this one
 opt.expandtab = true -- Replace tabs with spaces automatically
+opt.autoread = true -- Automatically reload a file if it has been modified.
 opt.swapfile = false -- Don't use a swapfile
+opt.writebackup = true -- Back up, to prevent against potential crashes
 opt.cursorline = true -- Show the cursor line
 opt.undolevels = 10000 -- Allow up to 10000 undos
 opt.tabstop = 4 -- Display a tab (\t) as 4 spaces
@@ -117,73 +122,77 @@ opt.softtabstop = 4 -- Display a tab (\t) as 4 spaces
 opt.shiftwidth = 4 -- Indents for << or >>
 opt.spellsuggest = 'best,5' -- Prefer the best suggestions
 opt.foldmethod = 'indent' -- Fold based on indents
+opt.timeoutlen = 0 -- Show keybinds after this many milliseconds
 opt.termguicolors = true -- Enable true color
 opt.autochdir = true -- Automatically change directory to the file we're editing
-opt.background = 'dark' -- Set background to dark
-opt.fillchars = {
+opt.fillchars = { -- Display tab indents using this character
     vert = '▏',
 }
 
 -- Keybinds for handling splits
-keymap('n', '<C-h>',      '<C-w>h',                                      defaultKeybindOptions)
-keymap('n', '<C-j>',      '<C-w>j',                                      defaultKeybindOptions)
-keymap('n', '<C-k>',      '<C-w>k',                                      defaultKeybindOptions)
-keymap('n', '<C-l>',      '<C-w>l',                                      defaultKeybindOptions)
-keymap('n', '<C-s>',      '<cmd>split<cr>',                              defaultKeybindOptions)
-keymap('n', '<C-w>',      '<cmd>vsplit<cr>',                             defaultKeybindOptions)
-keymap('n', '<C-q>',      '<cmd>only<cr>',                               defaultKeybindOptions)
-keymap('n', '<C-t>',      '<cmd>term<cr>',                               defaultKeybindOptions)
-keymap('n', '<C-f>',      '<cmd>Telescope fd<cr>',                       defaultKeybindOptions)
-keymap('n', 'H',          '<cmd>vertical resize -10<cr>',                defaultKeybindOptions)
-keymap('n', 'J',          '<cmd>resize -10<cr>',                         defaultKeybindOptions)
-keymap('n', 'K',          '<cmd>resize +10<cr>',                         defaultKeybindOptions)
-keymap('n', 'L',          '<cmd>vertical resize +10<cr>',                defaultKeybindOptions)
+keymap('n', '<C-h>',      '<C-w>h',                                                 defaultKeybindOptions) -- Move left
+keymap('n', '<C-j>',      '<C-w>j',                                                 defaultKeybindOptions) -- Move down
+keymap('n', '<C-k>',      '<C-w>k',                                                 defaultKeybindOptions) -- Move up
+keymap('n', '<C-l>',      '<C-w>l',                                                 defaultKeybindOptions) -- Move right
+keymap('n', '<C-s>',      '<cmd>split<cr>',                                         defaultKeybindOptions) -- Split horizontally
+keymap('n', '<C-w>',      '<cmd>vsplit<cr>',                                        defaultKeybindOptions) -- Split vertically
+keymap('n', '<C-q>',      '<cmd>only<cr>',                                          defaultKeybindOptions) -- Close all buffers except selected
+keymap('n', '<A-h>',      '<cmd>vertical resize -10<cr>',                           defaultKeybindOptions) -- Decrease size vertically by 10
+keymap('n', '<A-j>',      '<cmd>resize -10<cr>',                                    defaultKeybindOptions) -- Decrease size horizontally by 10
+keymap('n', '<A-k>',      '<cmd>resize +10<cr>',                                    defaultKeybindOptions) -- Increase size horizontally by 10
+keymap('n', '<A-l>',      '<cmd>vertical resize +10<cr>',                           defaultKeybindOptions) -- Increase size vertically by 10
+keymap('n', '<C-A-h>',    '<cmd>lua require("swap-buffers").swap_buffers("h")<cr>', defaultKeybindOptions) -- Decrease size vertically by 10
+keymap('n', '<C-A-j>',    '<cmd>lua require("swap-buffers").swap_buffers("j")<cr>', defaultKeybindOptions) -- Decrease size vertically by 10
+keymap('n', '<C-A-k>',    '<cmd>lua require("swap-buffers").swap_buffers("k")<cr>', defaultKeybindOptions) -- Decrease size vertically by 10
+keymap('n', '<C-A-l>',    '<cmd>lua require("swap-buffers").swap_buffers("l")<cr>', defaultKeybindOptions) -- Decrease size vertically by 10
+keymap('n', '<C-t>',      '<cmd>term<cr>',                                          defaultKeybindOptions) -- Open a terminal emulator
 
 -- Keybinds for language/spell
-keymap('n', '<F2>',       '<cmd>set spell!<cr>',                         defaultKeybindOptions)
-keymap('n', '<F3>',       '<cmd>set spelllang=en_us<cr>',                defaultKeybindOptions)
-keymap('n', '<F4>',       '<cmd>set spelllang=sv_se<cr>',                defaultKeybindOptions)
-keymap('n', '<F7>',       '<cmd>silent execute "!setxkbmap us"<cr>',     defaultKeybindOptions)
-keymap('n', '<F8>',       '<cmd>silent execute "!setxkbmap se"<cr>',     defaultKeybindOptions)
-keymap('n', 'ca',         'z=',                                          defaultKeybindOptions)
+keymap('n', '<F2>',       '<cmd>set spell!<cr>',                                    defaultKeybindOptions) -- Enable spell check
+keymap('n', '<F3>',       '<cmd>set spelllang=en_us<cr>',                           defaultKeybindOptions) -- Set spell check langauge to English (United States)
+keymap('n', '<F4>',       '<cmd>set spelllang=sv_se<cr>',                           defaultKeybindOptions) -- Set spell check language to Swedish
+keymap('n', '<F7>',       '<cmd>silent execute "!setxkbmap us"<cr>',                defaultKeybindOptions) -- Set keyboard layout to English (United States)
+keymap('n', '<F8>',       '<cmd>silent execute "!setxkbmap se"<cr>',                defaultKeybindOptions) -- Set keyboard layout to Swedish
+keymap('n', 'ca',         'z=',                                                     defaultKeybindOptions) -- Suggest suitable spell check replacements
 
 -- Miscellanious
-keymap('n', '<C-n>',      '<cmd>tab :new<cr>',                           defaultKeybindOptions)
-keymap('n', 'j',          '<Plug>(accelerated_jk_j)',                    defaultKeybindOptions)
-keymap('n', 'k',          '<Plug>(accelerated_jk_k)',                    defaultKeybindOptions)
-keymap('n', 'gj',         '<Plug>(accelerated_jk_gj)',                   defaultKeybindOptions)
-keymap('n', 'gk',         '<Plug>(accelerated_jk_gk)',                   defaultKeybindOptions)
-keymap('n', 'd',          '"_d',                                         defaultKeybindOptions)
-keymap('x', 'd',          '"_d',                                         defaultKeybindOptions)
-keymap('x', 'p',          '"_dP',                                        defaultKeybindOptions)
-keymap('n', 'c',          '"_c',                                         defaultKeybindOptions)
-keymap('n', 'ZX',         '<cmd>q!<cr>',                                 defaultKeybindOptions)
-keymap('n', 'Zz',         '<cmd>w!<cr>',                                 defaultKeybindOptions)
-keymap('n', '<C-A>',      'v/{<cr>%',                                    defaultKeybindOptions)
-keymap('n', '<C-e>',      '<cmd>NvimTreeToggle<cr>',                     defaultKeybindOptions)
-keymap('n', '.',          '<cmd>TroubleToggle<cr>',                      defaultKeybindOptions)
-keymap('n', ',',          '<cmd>AerialToggle<cr>',                       defaultKeybindOptions)
-keymap('n', '<leader>G',  '<cmd>Neogit<cr>',                             defaultKeybindOptions)
-keymap('n', '<leader>gt', '<cmd>Gitsigns toggle_current_line_blame<cr>', defaultKeybindOptions)
+keymap('n', '<C-n>',      '<cmd>tab :new<cr>',                                      defaultKeybindOptions) -- Create new buffer
+keymap('n', 'j',          '<Plug>(accelerated_jk_j)',                               defaultKeybindOptions) -- Move down
+keymap('n', 'k',          '<Plug>(accelerated_jk_k)',                               defaultKeybindOptions) -- Move up
+keymap('n', 'gj',         '<Plug>(accelerated_jk_gj)',                              defaultKeybindOptions) -- Move down (line wrapping)
+keymap('n', 'gk',         '<Plug>(accelerated_jk_gk)',                              defaultKeybindOptions) -- Move up (line wrapping)
+keymap('n', 'd',          '"_d',                                                    defaultKeybindOptions) -- Delete without yanking
+keymap('x', 'd',          '"_d',                                                    defaultKeybindOptions) -- Delete without yanking
+keymap('x', 'p',          '"_dP',                                                   defaultKeybindOptions) -- Paste without clearing clipboard
+keymap('n', 'c',          '"_c',                                                    defaultKeybindOptions) -- Change without yanking
+keymap('n', 'ZX',         '<cmd>q!<cr>',                                            defaultKeybindOptions) -- Quit without saving
+keymap('n', 'Zz',         '<cmd>w!<cr>',                                            defaultKeybindOptions) -- Save
+keymap('n', '<C-A>',      'v/{<cr>%',                                               defaultKeybindOptions) -- Select an entire function
+keymap('n', '<C-e>',      '<cmd>NvimTreeToggle<cr>',                                defaultKeybindOptions) -- Toggle NvimTree
+keymap('n', '.',          '<cmd>TroubleToggle<cr>',                                 defaultKeybindOptions) -- Toggle Trouble
+keymap('n', ',',          '<cmd>AerialToggle<cr>',                                  defaultKeybindOptions) -- Toggle Aerial
+keymap('n', '<leader>G',  '<cmd>Neogit<cr>',                                        defaultKeybindOptions) -- Toggle Neogit
+keymap('n', '<leader>gt', '<cmd>Gitsigns toggle_current_line_blame<cr>',            defaultKeybindOptions) -- Toggle current line blame
+keymap('n', '<C-f>',      '<cmd>Telescope fd<cr>',                                  defaultKeybindOptions) -- Toggle Telescope file opener
 
 -- Keybinds for handling tabs
-keymap('n', '<A-,>',      '<cmd>BufferLineCyclePrev<cr>',                defaultKeybindOptions)
-keymap('n', '<A-.>',      '<cmd>BufferLineCycleNext<cr>',                defaultKeybindOptions)
-keymap('n', '<C-Tab>',    '<cmd>BufferLineCycleNext<cr>',                defaultKeybindOptions)
-keymap('n', '<A-<>',      '<cmd>BufferLineMovePrev<cr>',                 defaultKeybindOptions)
-keymap('n', '<A->>',      '<cmd>BufferLineMoveNext<cr>',                 defaultKeybindOptions)
-keymap('n', '<A-1>',      '<cmd>BufferLineGoToBuffer 1<cr>',             defaultKeybindOptions)
-keymap('n', '<A-2>',      '<cmd>BufferLineGoToBuffer 2<cr>',             defaultKeybindOptions)
-keymap('n', '<A-3>',      '<cmd>BufferLineGoToBuffer 3<cr>',             defaultKeybindOptions)
-keymap('n', '<A-4>',      '<cmd>BufferLineGoToBuffer 4<cr>',             defaultKeybindOptions)
-keymap('n', '<A-5>',      '<cmd>BufferLineGoToBuffer 5<cr>',             defaultKeybindOptions)
-keymap('n', '<A-6>',      '<cmd>BufferLineGoToBuffer 6<cr>',             defaultKeybindOptions)
-keymap('n', '<A-7>',      '<cmd>BufferLineGoToBuffer 7<cr>',             defaultKeybindOptions)
-keymap('n', '<A-8>',      '<cmd>BufferLineGoToBuffer 8<cr>',             defaultKeybindOptions)
-keymap('n', '<A-9>',      '<cmd>BufferLineGoToBuffer 9<cr>',             defaultKeybindOptions)
-keymap('n', '<A-0>',      '<cmd>BufferLineGoToBuffer -1<cr>',            defaultKeybindOptions)
-keymap('n', '<A-p>',      '<cmd>BufferLineTogglePin<cr>',                defaultKeybindOptions)
-keymap('n', '<A-c>',      '<cmd>bdelete<cr>',                            defaultKeybindOptions)
+keymap('n', '<A-,>',      '<cmd>BufferLineCyclePrev<cr>',                           defaultKeybindOptions) -- Cycle previous
+keymap('n', '<A-.>',      '<cmd>BufferLineCycleNext<cr>',                           defaultKeybindOptions) -- Cycle next
+keymap('n', '<C-Tab>',    '<cmd>BufferLineCycleNext<cr>',                           defaultKeybindOptions) -- Also cycle next
+keymap('n', '<A-<>',      '<cmd>BufferLineMovePrev<cr>',                            defaultKeybindOptions) -- Move to the previous tab
+keymap('n', '<A->>',      '<cmd>BufferLineMoveNext<cr>',                            defaultKeybindOptions) -- Move to the next tab
+keymap('n', '<A-1>',      '<cmd>BufferLineGoToBuffer 1<cr>',                        defaultKeybindOptions) -- Move to buffer 1
+keymap('n', '<A-2>',      '<cmd>BufferLineGoToBuffer 2<cr>',                        defaultKeybindOptions) -- Move to buffer 2
+keymap('n', '<A-3>',      '<cmd>BufferLineGoToBuffer 3<cr>',                        defaultKeybindOptions) -- Move to buffer 3
+keymap('n', '<A-4>',      '<cmd>BufferLineGoToBuffer 4<cr>',                        defaultKeybindOptions) -- Move to buffer 4
+keymap('n', '<A-5>',      '<cmd>BufferLineGoToBuffer 5<cr>',                        defaultKeybindOptions) -- Move to buffer 5
+keymap('n', '<A-6>',      '<cmd>BufferLineGoToBuffer 6<cr>',                        defaultKeybindOptions) -- Move to buffer 6
+keymap('n', '<A-7>',      '<cmd>BufferLineGoToBuffer 7<cr>',                        defaultKeybindOptions) -- Move to buffer 7
+keymap('n', '<A-8>',      '<cmd>BufferLineGoToBuffer 8<cr>',                        defaultKeybindOptions) -- Move to buffer 8
+keymap('n', '<A-9>',      '<cmd>BufferLineGoToBuffer 9<cr>',                        defaultKeybindOptions) -- Move to buffer 9
+keymap('n', '<A-0>',      '<cmd>BufferLineGoToBuffer -1<cr>',                       defaultKeybindOptions) -- Move to the last buffer
+keymap('n', '<A-p>',      '<cmd>BufferLineTogglePin<cr>',                           defaultKeybindOptions) -- Toggle pin for a tab
+keymap('n', '<A-c>',      '<cmd>bdelete<cr>',                                       defaultKeybindOptions) -- Close a tab
 
 autocmd('BufWritePre', { -- Remove trailing spaces
     pattern = { '*' },
