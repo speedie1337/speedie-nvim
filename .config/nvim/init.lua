@@ -3,6 +3,7 @@
     -- https://git.speedie.site/speedie/speedie-nvim --
 ]]--
 
+local g = vim.g -- Convenient alias
 local opt = vim.opt -- Convenient alias
 local keymap = vim.api.nvim_set_keymap -- Convenient alias
 local autocmd = vim.api.nvim_create_autocmd -- Convenient alias
@@ -11,7 +12,6 @@ local defaultKeybindOptions = { noremap = true, silent = true } -- Default keybi
 LoadPreviousSessionOnLoad = true -- Load previous session or not
 EnableImageSupport = false -- Enable image support or not
 ImageBackend = 'kitty' -- Image backend to support (kitty/ueberzug)
-LeaderKey = ' ' -- The leader key to use.
 MaxAccelerationSpeed = 300 -- Max speed for j/k/gj/gk bindings.
 Theme = 'oxocarbon' -- Theme to use
 Languages = { -- Languages to support - Used to configure highlighting
@@ -80,6 +80,12 @@ Plugins = { -- Plugins to use
         },
     }, -- Indentation blankline
     { 'uga-rosa/translate.nvim' }, -- Built in translate
+    { 'ahmedkhalf/project.nvim',
+        dependencies = {
+            'stevearc/overseer.nvim',
+        },
+    }, -- Project manager
+    { 'Zeioth/compiler.nvim' }, -- Compiler
     { 'folke/trouble.nvim' }, -- Display warnings and errors neatly
     { 'folke/noice.nvim', event = 'VeryLazy',
         dependencies = {
@@ -126,6 +132,8 @@ opt.autochdir = true -- Automatically change directory to the file we're editing
 opt.fillchars = { -- Display tab indents using this character
     vert = '▏',
 }
+g.mapleader = ' ' -- Leader key
+g.maplocalleader = ' ' -- Leader key
 
 -- Keybinds for handling splits
 keymap('n', '<C-h>',      '<C-w>h',                                                 defaultKeybindOptions) -- Move left
@@ -172,6 +180,8 @@ keymap('n', ',',          '<cmd>AerialToggle<cr>',                              
 keymap('n', '<leader>G',  '<cmd>Neogit<cr>',                                        defaultKeybindOptions) -- Toggle Neogit
 keymap('n', '<leader>gt', '<cmd>Gitsigns toggle_current_line_blame<cr>',            defaultKeybindOptions) -- Toggle current line blame
 keymap('n', '<C-f>',      '<cmd>Telescope fd<cr>',                                  defaultKeybindOptions) -- Toggle Telescope file opener
+keymap('n', '<leader>P',  '<cmd>Telescope projects<cr>',                            defaultKeybindOptions) -- Toggle Telescope project opener
+keymap('n', ';',          '<cmd>CompilerOpen<cr>',                                  defaultKeybindOptions) -- Toggle compiler options
 
 -- Keybinds for handling tabs
 keymap('n', '<A-,>',      '<cmd>BufferLineCyclePrev<cr>',                           defaultKeybindOptions) -- Cycle previous
@@ -205,4 +215,4 @@ autocmd('BufReadPre', { -- Enable spell check for all Markdown files
     end,
 })
 
-require('bootstrap') -- Set up Lazy and plugins.
+require('bootstrap') -- Set up Lazy and plugins. Has to be done before keybinds are defined.
