@@ -29,7 +29,6 @@ LanguageServers = { -- Language servers to use for LSP, run LspInstall <lang> to
     'html', -- For HTML
     'cssls', -- For CSS
     'clangd', -- For C and C++
-    'phpactor', -- For PHP
     'lua_ls', -- For Lua
     'marksman', -- For Markdown
     'swift_mesonls', -- For meson
@@ -129,6 +128,14 @@ opt.foldmethod = 'indent' -- Fold based on indents
 opt.timeoutlen = 0 -- Show keybinds after this many milliseconds
 opt.termguicolors = true -- Enable true color
 opt.autochdir = true -- Automatically change directory to the file we're editing
+opt.shortmess:append { -- Disable some notifications
+    A = true, -- Don't display swap file warning
+    W = true, -- Don't display notification on save
+    I = true, -- Don't display intro
+    F = true, -- Don't display file information when editing a file
+    c = true, -- Don't display notification about search results
+
+}
 opt.fillchars = { -- Display tab indents using this character
     vert = '▏',
 }

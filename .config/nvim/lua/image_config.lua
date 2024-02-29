@@ -9,9 +9,9 @@ if EnableImageSupport == true then
     local imageBackend = "kitty"
 
     if ImageBackend == "ueberzug" then
-	imageBackend = "ueberzug"
+        imageBackend = "ueberzug"
     else
-	imageBackend = "kitty"
+        imageBackend = "kitty"
     end
 
     require('image').setup({

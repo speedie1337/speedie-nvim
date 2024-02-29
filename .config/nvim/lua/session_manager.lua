@@ -13,8 +13,8 @@ if LoadPreviousSessionOnLoad and SessionFile ~= '' then
             local _sessionFile = vim.fn.expand(SessionFile)
             if vim.fn.argc() == 0 then
                 if vim.fn.filereadable(_sessionFile) == 1 then
-                    vim.cmd('source ' .. _sessionFile)
-                    vim.cmd("filetype detect")
+                    vim.cmd('silent source ' .. _sessionFile)
+                    vim.cmd("silent filetype detect")
                 end
             end
         end,
