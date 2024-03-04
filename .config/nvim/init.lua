@@ -81,6 +81,10 @@ Plugins = { -- Plugins to use
     }, -- Indentation blankline
     { 'uga-rosa/translate.nvim' }, -- Built in translate
     { 'uga-rosa/ccc.nvim' }, -- Color picker
+    { 'swaits/thethethe.nvim',
+        event = 'VeryLazy',
+        opts = {},
+    }, -- Autocorrect plugin
     { 'ahmedkhalf/project.nvim',
         dependencies = {
             'stevearc/overseer.nvim',
@@ -88,7 +92,8 @@ Plugins = { -- Plugins to use
     }, -- Project manager
     { 'Zeioth/compiler.nvim' }, -- Compiler
     { 'folke/trouble.nvim' }, -- Display warnings and errors neatly
-    { 'folke/noice.nvim', event = 'VeryLazy',
+    { 'folke/noice.nvim',
+        event = 'VeryLazy',
         dependencies = {
             'MunifTanjim/nui.nvim',
             'rcarriga/nvim-notify',
