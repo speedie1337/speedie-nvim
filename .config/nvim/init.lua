@@ -14,6 +14,7 @@ EnableImageSupport = false -- Enable image support or not
 ImageBackend = 'kitty' -- Image backend to support (kitty/ueberzug)
 MaxAccelerationSpeed = 300 -- Max speed for j/k/gj/gk bindings.
 Theme = 'oxocarbon' -- Theme to use
+DictFile = 'en_dict.txt' -- Dictionary to use for spell check
 Languages = { -- Languages to support - Used to configure highlighting
     'html', -- For HTML
     'css', -- For CSS

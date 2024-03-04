@@ -32,6 +32,7 @@ can change whenever I feel like it. **This is not a NeoVim distro. It is my opin
 - Good internet connection so you can download things.
 - Preferably also nerd fonts, or stuff might look a bit weird.
   - To install them, you can use the included `install_fonts.sh` script.
+- miscfiles (For word completion)
 
 ## Installation (Linux/macOS/BSD)
 

@@ -102,8 +102,8 @@ cmp.setup({
             keyword_length = 2,
             option = {
                 convert_case = true,
-                loud = true
-                --dict = '/usr/share/dict/words'
+                loud = true,
+                dict = vim.fn.stdpath("config") .. '/' .. DictFile,
             }
         }
     },
