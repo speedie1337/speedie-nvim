@@ -10,7 +10,8 @@ if (Test-Path "$env:USERPROFILE\AppData\Local\nvim") {
     Remove-Item -Path "$env:USERPROFILE\AppData\Local\nvim" -Recurse -Force
 }
 
-Copy-Item -Path ".config\nvim" -Destination "$env:USERPROFILE\AppData\Local\" -Recurse -Force
+New-Item -Path "$env:USERPROFILE\AppData\Local\nvim"
+Copy-Item -Path * -Destination "$env:USERPROFILE\AppData\Local\nvim" -Recurse -Force
 New-Item -Path "$env:USERPROFILE\AppData\Local\nvim\spell" -ItemType Directory -Force
 
 Write-Output "installed."
