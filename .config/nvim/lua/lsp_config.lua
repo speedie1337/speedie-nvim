@@ -94,7 +94,18 @@ local cmp = require('cmp')
 
 cmp.setup({
     sources = {
-        { name = 'nvim_lsp' },
+        {
+            name = 'nvim_lsp',
+        },
+        {
+            name = 'look',
+            keyword_length = 2,
+            option = {
+                convert_case = true,
+                loud = true
+                --dict = '/usr/share/dict/words'
+            }
+        }
     },
 
     mapping = cmp.mapping.preset.insert({

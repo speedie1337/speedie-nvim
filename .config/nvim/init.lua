@@ -69,6 +69,7 @@ Plugins = { -- Plugins to use
             'neovim/nvim-lspconfig',
             'hrsh7th/cmp-nvim-lsp',
             'hrsh7th/nvim-cmp',
+            'octaltree/cmp-look',
             'L3MON4D3/LuaSnip',
         },
     }, -- LSP
@@ -79,6 +80,7 @@ Plugins = { -- Plugins to use
         },
     }, -- Indentation blankline
     { 'uga-rosa/translate.nvim' }, -- Built in translate
+    { 'uga-rosa/ccc.nvim' }, -- Color picker
     { 'ahmedkhalf/project.nvim',
         dependencies = {
             'stevearc/overseer.nvim',
@@ -188,6 +190,7 @@ keymap('n', '<leader>G',  '<cmd>Neogit<cr>',                                    
 keymap('n', '<leader>gt', '<cmd>Gitsigns toggle_current_line_blame<cr>',            defaultKeybindOptions) -- Toggle current line blame
 keymap('n', '<C-f>',      '<cmd>Telescope fd<cr>',                                  defaultKeybindOptions) -- Toggle Telescope file opener
 keymap('n', '<leader>P',  '<cmd>Telescope projects<cr>',                            defaultKeybindOptions) -- Toggle Telescope project opener
+keymap('n', '<leader>C',  '<cmd>CccPick<cr>',                                       defaultKeybindOptions) -- Toggle color picker
 keymap('n', ';',          '<cmd>CompilerOpen<cr>',                                  defaultKeybindOptions) -- Toggle compiler options
 
 -- Keybinds for handling tabs
