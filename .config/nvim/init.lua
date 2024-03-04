@@ -107,20 +107,6 @@ Plugins = { -- Plugins to use
     { 'stevearc/aerial.nvim' }, -- Object viewer
     { 'caenrique/swap-buffers.nvim' }, -- Swap buffers
     { 'LunarVim/bigfile.nvim' }, -- Disable heavy features if the file is big
-    { 'Zeioth/distroupgrade.nvim',
-        dependencies = {
-            'nvim-lua/plenary.nvim',
-        },
-        event = 'VeryLazy',
-        opts = function()
-            local config_dir = vim.fn.stdpath('config')
-
-            return {
-                remote = "origin",
-                release_tag = nil,
-            }
-        end
-    }, -- Allow for easy updating
 }
 
 opt.title = true -- Display title

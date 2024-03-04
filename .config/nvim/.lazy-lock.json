@@ -11,7 +11,6 @@
   "compiler.nvim": { "branch": "main", "commit": "c1d92304fdf478342668b991739ffab46b219d7c" },
   "conform.nvim": { "branch": "master", "commit": "61cff430c9f15770d0c5e68c1b08067223bd94ab" },
   "diffview.nvim": { "branch": "main", "commit": "3dc498c9777fe79156f3d32dddd483b8b3dbd95f" },
-  "distroupgrade.nvim": { "branch": "main", "commit": "c3210e79f049cd6bf78e661d19e42b473a0aa686" },
   "git.nvim": { "branch": "main", "commit": "6b4a66f8a66e567bf27a0ef1de72cf5e338df4c3" },
   "gitsigns.nvim": { "branch": "main", "commit": "2c2463dbd82eddd7dbab881c3a62cfbfbe3c67ae" },
   "image.nvim": { "branch": "master", "commit": "4c6cb5ad93ee93d8d7b7c84e1eb291cee99f0a0e" },
