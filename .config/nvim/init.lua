@@ -13,8 +13,12 @@ LoadPreviousSessionOnLoad = true -- Load previous session or not
 EnableImageSupport = false -- Enable image support or not
 ImageBackend = 'kitty' -- Image backend to support (kitty/ueberzug)
 MaxAccelerationSpeed = 300 -- Max speed for j/k/gj/gk bindings.
-Theme = 'oxocarbon' -- Theme to use
+Theme = 'tokyonight-day' -- Theme to use
+StatusTheme = 'tokyonight' -- Status theme to use
 DictFile = 'en_dict.txt' -- Dictionary to use for spell check
+Font = ':' -- Font to use (GUI only)
+CursorAnimationLength = 0 -- Cursor animation length (Neovide only)
+ScrollAnimationLength = 0.1 -- Scroll animation length (Neovide only)
 Languages = { -- Languages to support - Used to configure highlighting
     'html', -- For HTML
     'css', -- For CSS
@@ -36,6 +40,7 @@ LanguageServers = { -- Language servers to use for LSP, run LspInstall <lang> to
 }
 Themes = {
     { 'nyoom-engineering/oxocarbon.nvim' }, -- Oxocarbon
+    { 'folke/tokyonight.nvim' }, -- Tokyo Night
     --[[
     { 'rmehri01/onenord.nvim', branch = 'main'  }, -- One Nord theme
     { 'romgrk/doom-one.vim' }, -- Doom-One theme
@@ -107,6 +112,10 @@ Plugins = { -- Plugins to use
     { 'stevearc/aerial.nvim' }, -- Object viewer
     { 'caenrique/swap-buffers.nvim' }, -- Swap buffers
     { 'LunarVim/bigfile.nvim' }, -- Disable heavy features if the file is big
+    { 'github/copilot.vim' }, -- Copilot
+    { 'altermo/nxwm',
+        branch = 'x11',
+    }, -- GUI display
 }
 
 opt.title = true -- Display title
@@ -190,7 +199,7 @@ keymap('n', 'ZX',         '<cmd>q!<cr>',                                        
 keymap('n', 'Zz',         '<cmd>w!<cr>',                                            defaultKeybindOptions) -- Save
 keymap('n', '<C-A>',      'v/{<cr>%',                                               defaultKeybindOptions) -- Select an entire function
 keymap('n', '<C-e>',      '<cmd>NvimTreeToggle<cr>',                                defaultKeybindOptions) -- Toggle NvimTree
-keymap('n', '.',          '<cmd>TroubleToggle<cr>',                                 defaultKeybindOptions) -- Toggle Trouble
+keymap('n', '.',          '<cmd>Trouble toggle diagnostics<cr>',                                 defaultKeybindOptions) -- Toggle Trouble
 keymap('n', ',',          '<cmd>AerialToggle<cr>',                                  defaultKeybindOptions) -- Toggle Aerial
 keymap('n', '<leader>G',  '<cmd>Neogit<cr>',                                        defaultKeybindOptions) -- Toggle Neogit
 keymap('n', '<leader>gt', '<cmd>Gitsigns toggle_current_line_blame<cr>',            defaultKeybindOptions) -- Toggle current line blame

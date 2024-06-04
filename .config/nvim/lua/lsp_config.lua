@@ -80,7 +80,7 @@ local lua_ls = function()
         }
       }
     })
-end,
+end
 
 require('mason').setup({})
 
@@ -96,6 +96,9 @@ cmp.setup({
     sources = {
         {
             name = 'nvim_lsp',
+        },
+        {
+            name = 'copilot',
         },
         {
             name = 'look',

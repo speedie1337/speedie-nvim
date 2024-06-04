@@ -3,4 +3,4 @@
     -- https://git.speedie.site/speedie/speedie-nvim --
 ]]--
 
-vim.cmd('colorscheme ' .. Theme .. '')
+vim.cmd.colorscheme(Theme)

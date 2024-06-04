@@ -8,6 +8,7 @@
     If you want plugins to have special settings, you should modify those
     Lua files.
 --]]
+require('theme_config')
 require('conform_config')
 require('autoclose_config')
 require('lsp_config')
@@ -17,7 +18,6 @@ require('tree_config')
 require('telescope_config')
 require('image_config')
 require('ts_config')
-require('theme_config')
 require('trouble_config')
 require('translate_config')
 require('accelerated_config')

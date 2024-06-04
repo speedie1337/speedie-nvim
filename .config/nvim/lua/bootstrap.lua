@@ -29,3 +29,7 @@ local lazyOptions = {
 
 require('lazy').setup(combineTable(combineTable(Plugins, Themes), lazyOptions))
 require('setup')
+
+vim.g.neovide_cursor_animation_length = CursorAnimationLength
+vim.g.neovide_scroll_animation_length = ScrollAnimationLength
+vim.o.guifont = Font
