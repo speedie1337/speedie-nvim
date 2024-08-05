@@ -97,9 +97,11 @@ cmp.setup({
         {
             name = 'nvim_lsp',
         },
+        --[[
         {
             name = 'copilot',
         },
+        --]]
         {
             name = 'look',
             keyword_length = 2,

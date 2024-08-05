@@ -112,10 +112,12 @@ Plugins = { -- Plugins to use
     { 'stevearc/aerial.nvim' }, -- Object viewer
     { 'caenrique/swap-buffers.nvim' }, -- Swap buffers
     { 'LunarVim/bigfile.nvim' }, -- Disable heavy features if the file is big
-    { 'github/copilot.vim' }, -- Copilot
     { 'altermo/nxwm',
         branch = 'x11',
     }, -- GUI display
+    { 'OXY2DEV/markview.nvim' }, -- Markdown viewer
+    { 'speedie1337/hologram.nvim' }, -- Image support (incl. Markdown)
+    { 'tpope/vim-sleuth' }, -- Automatically adjust tab options based on the file
 }
 
 opt.title = true -- Display title
