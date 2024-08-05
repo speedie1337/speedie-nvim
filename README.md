@@ -1,8 +1,8 @@
 # speedie-nvim
 
-![img](/screenshots/scr0.png)
-![img](/screenshots/scr1.png)
-![img](/screenshots/scr2.png)
+![img](./screenshots/scr0.png)
+![img](./screenshots/scr1.png)
+![img](./screenshots/scr2.png)
 
 My personal neovim configuration. Designed to be an IDE replacement for me.
 If you prefer something lighter, check out my [speedie-vim](https://git.speedie.site/speedie/speedie-vim) configuration instead.
